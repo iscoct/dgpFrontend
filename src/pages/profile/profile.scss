@@ -1,0 +1,19 @@
+.profileContainer {
+    align-content: center;
+}
+
+.profileRow {
+    justify-content: center;
+
+    &.avatar {
+        margin-top: 10%;
+    }
+
+    &.personalData {
+        margin-top: 10%;
+    }
+
+    &.description {
+        margin-top: 15%;
+    }
+}

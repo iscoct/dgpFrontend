@@ -1,0 +1,24 @@
+.row {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.MuiFormLabel-root.MuiInputLabel-formControl, .MuiInputBase-input.MuiInput-input {
+    color: white;
+}
+
+.MuiFormLabel-root.MuiInputLabel-root.Mui-focused {
+    color: white;
+}
+
+.MuiInputBase-root.MuiInput-root.MuiInput-underline {
+    border-bottom: 1px solid white;
+}
+
+.MuiFormLabel-root.MuiInputLabel-formControl, .MuiInputBase-input.MuiInput-input {
+    font-size: 40px;
+}
+
+.MuiButton-label {
+    font-size: 30px;
+}
