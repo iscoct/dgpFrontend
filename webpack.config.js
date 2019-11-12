@@ -23,6 +23,12 @@ const galleryConfig = {
     resolve: {
         extensions: ['.js', '.tsx']
     },
+    devServer: {
+    	headers: {
+    		'Access-Control-Allow-Origin': '*',
+    		'Access-Control-Allow-Headers': 'access-control-allow-origin'
+    	}
+    },
     module: {
         rules: [
             {

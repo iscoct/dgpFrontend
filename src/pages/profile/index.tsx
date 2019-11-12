@@ -7,7 +7,7 @@ import Sidedrawer from '../../components/sidedrawer';
 import './profile.scss';
 
 export default function(props: any): JSX.Element {
-    const { nombre, localidad, edad, email, telefono, description, acciones } = props;
+    const { nombre, localidad, dateBirth, email, telefono, observations, acciones } = props;
     const typographyClasses = makeStyles({
         h4: {
             color: 'white'
@@ -43,7 +43,7 @@ export default function(props: any): JSX.Element {
                     <Typography classes={{ h5: typographyClasses.h5 }} variant='h5'>{localidad}</Typography>
                 </Row>
                 <Row className='profileRow'>
-                    <Typography classes={{ h5: typographyClasses.h5 }} variant='h5'>{edad} años</Typography>
+                    <Typography classes={{ h5: typographyClasses.h5 }} variant='h5'>{dateBirth}</Typography>
                 </Row>
                 <Row className='profileRow'>
                     <Typography classes={{ h5: typographyClasses.h5 }} variant='h5'>{email}</Typography>
@@ -52,7 +52,7 @@ export default function(props: any): JSX.Element {
                     <Typography classes={{ h5: typographyClasses.h5 }} variant='h5'>{telefono}</Typography>
                 </Row>
                 <Row className='description profileRow'>
-                    <Typography classes={{ h6: typographyClasses.h6 }} variant='h6'>{description}</Typography>
+                    <Typography classes={{ h6: typographyClasses.h6 }} variant='h6'>{observations}</Typography>
                 </Row>
             </Container>
         </React.Fragment>

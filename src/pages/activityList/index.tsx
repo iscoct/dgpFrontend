@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Typography, makeStyles, Chip, Grid } from '@material-ui/core';
 import Header from '../../components/header';
 
@@ -56,14 +56,27 @@ function crearActividad({ categoria, title, description, onClickActivity }: any)
     );
 }
 
-export default function({ actividades, onClickBack, onClickActivity }: any): JSX.Element {
-    const activitiesSections: JSX.Element = actividades ? (
+export default function({ onClickBack, onClickActivity }: any): JSX.Element {
+	const [activities, setActivities] = useState<any[]>([]);
+	const url = 'http://localhost:8000/api/actividades';
+
+	useEffect(() => {
+		fetch(url, {
+			method: 'GET',
+			credentials: 'include'
+		}).then((response) => response.json()).then((jsonResponse) => {
+			setActivities(jsonResponse);
+		}).catch(() => {
+			console.log('Hubo algún error al pedir las actividades');
+		});
+	});
+    const activitiesSections: JSX.Element = activities ? (
         <React.Fragment>
-            {actividades.map((actividad: any, index: any): JSX.Element => {
+            {activities.map((actividad: any, index: any): JSX.Element => {
                 return (
                     <section key={index} className='activityWrapper'>
                         {crearActividad({
-                            ...actividad,
+                            ...activities,
                             onClickActivity
                         })}
                     </section>
