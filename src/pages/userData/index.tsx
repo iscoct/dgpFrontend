@@ -3,12 +3,13 @@ import Header from '../../components/header';
 import { Form, Button } from 'react-bootstrap';
 import { Grid } from '@material-ui/core';
 
-function Input({ type, id, label, placeholder }: any): JSX.Element {
+function Input({ type, id, label, placeholder, value, onChange }: any): JSX.Element {
     return (
         <Grid xs={12} container justify='center'>
             <Form.Group controlId={id}>
                 <Form.Label>{label}</Form.Label>
-                <Form.Control type={type} placeholder={placeholder} />
+                <Form.Control value={value} type={type}
+                	placeholder={placeholder} onChange={onChange} />
             </Form.Group>
         </Grid>
     );
@@ -26,9 +27,10 @@ export default function({ crear = true, onClickBack, usuario = {} }: any): JSX.E
 	const [aspirations, setAspirations] = useState<string>('');
 	const [observations, setObservations] = useState<string>('');
 	const [rol, setRol] = useState<string>('');
-	
+	const [dateOfBirth, setDateOfBirth] = useState<Date>(new Date());
+
 	function onClick() {
-		const url = `http://localhost:8000/api/usuario${crear ? 'nuevo' : ''}`;
+		const url = `http://localhost:8000/api/usuario${crear ? '/nuevo' : ''}`;
 		
 		fetch(url, {
 			method: 'POST',
@@ -42,10 +44,15 @@ export default function({ crear = true, onClickBack, usuario = {} }: any): JSX.E
 				telefono: telephone,
 				aspiraciones: aspirations,
 				observaciones: observations,
-				password
-			})
+				fecha_nacimiento: dateOfBirth,
+				password,
+				rol
+			}),
+			credentials: 'include'
 		}).then((res) => res.json()).then((jsonResponse) => {
-			console.log(`Response: ${JSON.stringify(jsonResponse)}`);
+			console.log(`Se ha creado el usuario correctamente`);
+			
+			onClickBack();
 		});
 	}
 
@@ -60,7 +67,7 @@ export default function({ crear = true, onClickBack, usuario = {} }: any): JSX.E
                 <Grid justify='center' container>
                     <Grid xs={5} container item justify='center'>
                         <Input
-                            type='type'
+                            type='text'
                             id='userName'
                             label='Nombre'
                             placeholder={usuario.nombre || 'Introduzca su nombre'}
@@ -68,52 +75,54 @@ export default function({ crear = true, onClickBack, usuario = {} }: any): JSX.E
                             onChange={(event: any) => setName(event.target.value)}
                         />
                         <Input
-                            type='type'
+                            type='text'
                             id='primerApellido'
                             label='Primer apellido'
                             placeholder={usuario.primerApellido || 'Introduzca su primer apellido'}
                             value={firstSurname}
-                            onChange={setFirstSurname}
+                            onChange={(event: any) => setFirstSurname(event.target.value)}
                         />
                         <Input
-                            type='type'
+                            type='text'
                             id='segundoApellido'
                             label='Segundo apellido'
                             placeholder={usuario.segundoApellido || 'Introduzca su segudo apellido'}
                             value={secondSurname}
-                            onChange={setSecondSurname}
+                            onChange={(event: any) => setSecondSurname(event.target.value)}
                         />
                         <Input
-                            type='type'
+                            type='text'
                             id='dni'
                             label='DNI'
                             placeholder={usuario.dni || 'Introduzca su DNI'}
                             value={dni}
-                            onChange={setDni}
+                            onChange={(event: any) => setDni(event.target.value)}
                         />
                         <Input
-                            type='type'
+                            type='date'
                             id='dateOfBirth'
                             label='Fecha de nacimiento'
                             placeholder={usuario.fechaDeNacimiento || 'dd/mm/aaaa'}
+                            value={dateOfBirth}
+                            onChange={(event: any) => setDateOfBirth(event.target.value)}
                         />
                         <Input
-                            type='type'
+                            type='text'
                             id='localidad'
                             label='localidad'
                             placeholder={usuario.localidad || 'Introduzca su localidad'}
                             value={location}
-                            onChange={setLocation}
+                            onChange={(event: any) => setLocation(event.target.value)}
                         />
                     </Grid>
                     <Grid xs={5} container item justify='center'>
                         <Input
-                            type='type'
+                            type='text'
                             id='telefono'
                             label='Teléfono'
                             placeholder={usuario.telefono || 'Introduzca su teléfono'}
                             value={telephone}
-                            onChange={setTelephone}
+                            onChange={(event: any) => setTelephone(event.target.value)}
                         />
                         <Input
                             type='email'
@@ -121,7 +130,7 @@ export default function({ crear = true, onClickBack, usuario = {} }: any): JSX.E
                             label='Email'
                             placeholder={usuario.email || 'Introduzca su email'}
                             value={email}
-                            onChange={setEmail}
+                            onChange={(event: any) => setEmail(event.target.value)}
                         />
                         <Input
                             type='password'
@@ -129,7 +138,7 @@ export default function({ crear = true, onClickBack, usuario = {} }: any): JSX.E
                             label='Password'
                             placeholder={'Introduzca su contraseña'}
                             value={password}
-                            onChange={setPassword}
+                            onChange={(event: any) => setPassword(event.target.value)}
                         />
                         <Input
                             type='text'
@@ -137,23 +146,23 @@ export default function({ crear = true, onClickBack, usuario = {} }: any): JSX.E
                             label='Aspiraciones'
                             placeholder={usuario.aspiraciones || 'Introduzca sus aspiraciones'}
                             value={aspirations}
-                            onChange={setAspirations}
+                            onChange={(event: any) => setAspirations(event.target.value)}
                         />
                         <Input
-                            type='type'
+                            type='text'
                             id='observaciones'
                             label='Observaciones'
                             placeholder={usuario.observaciones || 'Introduzca sus observaciones'}
                             value={observations}
-                            onChange={setObservations}
+                            onChange={(event: any) => setObservations(event.target.value)}
                         />
                         <Input
-                            type='type'
+                            type='text'
                             id='rol'
                             label='Rol'
                             placeholder={usuario.rol || 'Introduzca su rol'}
                             value={rol}
-                            onChange={setRol}
+                            onChange={(event: any) => setRol(event.target.value)}
                         />
                     </Grid>
                     <Grid xs={12} container item justify='center'>
