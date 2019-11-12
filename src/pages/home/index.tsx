@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { Button, Input, InputLabel } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
@@ -8,6 +8,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './home.css';
 
 export default function({ onClickIniciar }: any): JSX.Element {
+	const [email, setEmail] = useState('');
+	const [password, setPassword] = useState('');
     const labelClasses = makeStyles({
         root: {
             color: 'white'
@@ -44,6 +46,7 @@ export default function({ onClickIniciar }: any): JSX.Element {
                         id="correo"
                         fullWidth={true}
                         placeholder="Correo"
+                        onChange={(event) => setEmail(event.target.value)}
                     />
                 </Row>
                 <Row>
@@ -60,6 +63,7 @@ export default function({ onClickIniciar }: any): JSX.Element {
                         fullWidth={true}
                         placeholder="Contraseña"
                         type="password"
+                        onChange={(event) => setPassword(event.target.value)}
                     />
                 </Row>
                 <Row className="justify-content-md-center">
@@ -73,7 +77,7 @@ export default function({ onClickIniciar }: any): JSX.Element {
                                 background: 'linear-gradient(to bottom, #BE6F03, #eb8905)',
                                 borderRadius: '10px'
                             }}
-                            onClick={onClickIniciar}
+                            onClick={() => onClickIniciar({ email, password })}
                         >
                             Iniciar
                         </Button>

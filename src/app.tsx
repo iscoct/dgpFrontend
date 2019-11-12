@@ -12,9 +12,20 @@ import Pages from './pages';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './app.scss';
 
+const serverUrl = 'http://localhost:8000/';
+
 function quePaginaDebeSerRenderizada(): JSX.Element {
     const [navigation, setNavigation] = useState<Symbol[]>([Pages.home]);
     const [ratingVote, setRatingVote] = useState<number>(5);
+    const [userName, setUserName] = useState<string>('');
+    const [userSurname, setUserSurname] = useState<string>('');
+    const [userDateBirth, setUserDateBirth] = useState<string>('');
+    const [userEmail, setUserEmail] = useState<string>('');
+    const [userPhone, setUserPhone] = useState<string>('');
+    const [userObservations, setUserObservations] = useState<string>('');
+    const [userLocation, setUserLocation] = useState<string>('');
+    const [hasCompletedSomeActivity, setHasCompletedSomeActivity] = useState<boolean>(false);
+    const [isSuperuser, setIsSuperuser] = useState<boolean>(false);
     const currentNavigation = navigation[navigation.length - 1];
     let page: JSX.Element;
 
@@ -56,16 +67,6 @@ function quePaginaDebeSerRenderizada(): JSX.Element {
         onPageChanged(Pages.modificarUsuario);
     }
 
-    function onModifyUser(): void {
-        console.log('Se ha finalizado la modificación del usuario');
-
-        onClickBack();
-    }
-
-    function onRemoveUser(): void {
-        console.log('Se ha pedido eliminar el usuario');
-    }
-
     function voteActivity(): void {
         console.log('Se ha pedido votar una actividad');
 
@@ -75,10 +76,60 @@ function quePaginaDebeSerRenderizada(): JSX.Element {
     function onClickVote(): void {
         console.log('Se ha votado');
     }
+    
+    function onClickIniciar(userLoginData: any): void {
+    	const url = `${serverUrl}api/usuario`;
+
+    	fetch(url, {
+    		method: 'POST',
+    		headers: {
+    			'Content-Type': 'application/json'
+    		},
+    		body: JSON.stringify(userLoginData),
+    		credentials: 'include'
+    	}).then((res) => res.json()).then((jsonResponse) => {
+    		if (jsonResponse.description === 'OK') {
+    			fetch(url, {
+    				method: 'GET',
+    				headers: {
+    					'Content-Type': 'application/json'
+    				},
+    				credentials: 'include'
+    			}).then((res: any) => res.json()).then(({ usuario }: any) => {
+    				setUserName(usuario.nombre);
+    				setUserSurname(`${usuario.apellido1} ${usuario.apellido2}`);
+    				setUserDateBirth(usuario.fecha_nacimiento);
+    				setUserEmail(usuario.email);
+    				setUserPhone(usuario.telefono);
+					setUserObservations(usuario.observaciones);
+					setUserLocation(usuario.localidad);
+
+					if (usuario.rol === 'administrador') {
+						setIsSuperuser(true);
+					}
+
+    				onPageChanged(Pages.perfil);
+    			});
+    			
+    			fetch(`${serverUrl}api/actividades`, {
+    				method: 'GET',
+    				headers: {
+    					'Content-Type': 'application/json'
+    				},
+    				credentials: 'include'
+    			}).then((res: any) => res.json()).then((jsonResponse: any) => {
+    				if (jsonResponse.actividades.length > 0) {
+    					setHasCompletedSomeActivity(true);
+    				}
+    			}).catch(() => {
+    				console.log('Hubo algún problema con las actividades');
+    			});
+    		}
+    	});
+    }
 
     switch(currentNavigation) {
         case Pages.perfil: {
-            const isUsualUser = true;
             const usualUser = {
                 acciones: [
                     {
@@ -88,13 +139,17 @@ function quePaginaDebeSerRenderizada(): JSX.Element {
                     {
                         text: 'Crear actividad',
                         onClick: () => onPageChanged(Pages.crearActividad)
-                    },
-                    {
-                        text: 'Realizadas',
-                        onClick: () => onPageChanged(Pages.actividadesRealizadas)
                     }
                 ]
             };
+            
+            if (hasCompletedSomeActivity) {
+            	usualUser.acciones.push({
+                    text: 'Realizadas',
+                    onClick: () => onPageChanged(Pages.actividadesRealizadas)
+                });
+            }
+
             const superuser = {
                 acciones: [
                     {
@@ -109,14 +164,14 @@ function quePaginaDebeSerRenderizada(): JSX.Element {
             };
             page = (
                 <Profile
-                    nombre = 'Cotán'
-                    localidad = 'Jerez de la Frontera'
-                    edad = {23}
-                    email = 'francisco.jose.cotan.lopez@gmail.com'
-                    telefono = {123456789}
-                    description = 'Esta es mi historia'
+                    nombre={`${userName} ${userSurname}`}
+                    localidad={userLocation}
+                    dateBirth={userDateBirth}
+                    email={userEmail}
+                    telefono={userPhone}
+                    observations={userObservations}
                     acciones={
-                        isUsualUser ? usualUser.acciones : superuser.acciones
+                        isSuperuser ? superuser.acciones : usualUser.acciones
                     }
                 />
             );
@@ -125,18 +180,6 @@ function quePaginaDebeSerRenderizada(): JSX.Element {
         } case Pages.listaDeActividades: {
             page = (
                 <ActivityList
-                    actividades = {[
-                        {
-                            categoria: 'Dummy categoria',
-                            title: 'Dummy title',
-                            description: 'Dummy description'
-                        },
-                        {
-                            categoria: 'Dummy categoria',
-                            title: 'Dummy title',
-                            description: 'Dummy description'
-                        }
-                    ]}
                     onClickBack = {onClickBack}
                     onClickActivity = {() => onPageChanged(Pages.apuntarseActividad)}
                 />
@@ -150,7 +193,7 @@ function quePaginaDebeSerRenderizada(): JSX.Element {
             );
             break;
         } case Pages.home: {
-            page = <Home onClickIniciar={() => onPageChanged(Pages.perfil)} />;
+            page = <Home onClickIniciar={onClickIniciar} />;
             break;
         }
         case Pages.apuntarseActividad:
@@ -175,18 +218,16 @@ function quePaginaDebeSerRenderizada(): JSX.Element {
         } case Pages.modificarUsuario: {
             page = (
                 <CreateUser
-                    onClick={onModifyUser}
-                    consulta={false}
+                    onClickBack={onClickBack}
+                    crear={false}
                 />
             );
             break;
         } case Pages.gestionarUsuarios: {
             page = (
                 <UserManagement
-                    usuarios={['Cotán', 'Montesino']}
                     onClickBack={onClickBack}
                     onModifyUser={goToModifyUser}
-                    onRemoveUser={onRemoveUser}
                 />
             );
             break;

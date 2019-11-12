@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '../../components/header';
 import { List, ListItem, Divider,
     makeStyles, Grid, Chip, Typography } from '@material-ui/core';
 
 import './userManagement.scss';
 
-export default function({ usuarios, onClickBack, onModifyUser, onRemoveUser }: any): JSX.Element {
+export default function({ onClickBack, onModifyUser }: any): JSX.Element {
     const dividerClass = makeStyles({
         light: {
             backgroundColor: 'white'
@@ -26,6 +26,31 @@ export default function({ usuarios, onClickBack, onModifyUser, onRemoveUser }: a
             color: 'white'
         }
     })();
+    const [users, setUsers] = useState<any[]>([]);
+	const url = 'http://localhost:8000/';
+
+	function onRemoveUser(user: any) {
+		fetch(`${url}api/usuario/${user.id}`, {
+			method: 'DELETE',
+			credentials: 'include',
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		}).then((res) => res.json()).then((jsonResponse) => {
+			console.log(`Response: ${JSON.stringify(jsonResponse)}`);
+		});
+	}
+
+	useEffect(() => {
+		fetch(`${url}api/usuarios`, {
+			method: 'GET',
+			credentials: 'include'
+		}).then((response) => response.json()).then(({ usuarios }) => {
+			if (JSON.stringify(usuarios) !== JSON.stringify(users)) {
+				setUsers(usuarios);
+			}
+		});
+	}, [users]);
 
     return (
         <React.Fragment>
@@ -34,9 +59,9 @@ export default function({ usuarios, onClickBack, onModifyUser, onRemoveUser }: a
                 onIconClick={onClickBack}
                 title='Gestión de Usuarios'
             />
-            {usuarios ?
+            {users ?
                 <List>
-                    {usuarios.map((user: string, index: string) => {
+                    {users.map((user: any, index: number) => {
                         return (
                             <React.Fragment key={index}>
                                 <ListItem>
@@ -47,7 +72,7 @@ export default function({ usuarios, onClickBack, onModifyUser, onRemoveUser }: a
                                                     root: typographyClass.initial
                                                 }}
                                             >
-                                                {user}
+                                                {user.nombre}
                                             </Typography>
                                         </Grid>
                                         <Grid xs={4} container justify='center' item>
