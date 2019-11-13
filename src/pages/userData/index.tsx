@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '../../components/header';
 import { Form, Button } from 'react-bootstrap';
 import { Grid } from '@material-ui/core';
@@ -15,7 +15,7 @@ function Input({ type, id, label, placeholder, value, onChange }: any): JSX.Elem
     );
 }
 
-export default function({ crear = true, onClickBack, usuario = {} }: any): JSX.Element {
+export default function({ crear = true, onClickBack, id }: any): JSX.Element {
 	const [name, setName] = useState<string>('');
 	const [firstSurname, setFirstSurname] = useState<string>('');
 	const [secondSurname, setSecondSurname] = useState<string>('');
@@ -28,12 +28,44 @@ export default function({ crear = true, onClickBack, usuario = {} }: any): JSX.E
 	const [observations, setObservations] = useState<string>('');
 	const [rol, setRol] = useState<string>('');
 	const [dateOfBirth, setDateOfBirth] = useState<Date>(new Date());
+	const baseUrl = 'http://localhost:8000/';
+
+	useEffect(() => {
+		if (id) {
+			const url = `${baseUrl}api/usuario/${id}`;
+			
+			fetch(url, {
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				credentials: 'include'
+			}).then((res) => res.json()).then(({ usuario }: any) => {
+				setName(usuario.nombre);
+				setFirstSurname(usuario.apellido1);
+				setSecondSurname(usuario.apellido2);
+				setDni(usuario.DNI);
+				setLocation(usuario.localidad);
+				setTelephone(usuario.telefono);
+				setEmail(usuario.email);
+				setPassword(usuario.password);
+				setAspirations(usuario.aspiraciones);
+				setObservations(usuario.observaciones);
+				setRol(usuario.rol);
+				setDateOfBirth(usuario.fecha_nacimiento);
+			});
+		}
+	}, []);
 
 	function onClick() {
-		const url = `http://localhost:8000/api/usuario${crear ? '/nuevo' : ''}`;
-		
+		const url = `${baseUrl}api/usuario${crear ? '/nuevo' : ''}`;
+		const method = crear ? 'POST' : 'PUT';
+
 		fetch(url, {
-			method: 'POST',
+			method,
+			headers: {
+				'Content-Type': 'application/json'
+			},
 			body: JSON.stringify({
 				nombre: name,
 				apellido1: firstSurname,
@@ -49,7 +81,7 @@ export default function({ crear = true, onClickBack, usuario = {} }: any): JSX.E
 				rol
 			}),
 			credentials: 'include'
-		}).then((res) => res.json()).then((jsonResponse) => {
+		}).then((res) => res.json()).then((jsonResponse: any) => {
 			console.log(`Se ha creado el usuario correctamente`);
 			
 			onClickBack();
@@ -70,7 +102,7 @@ export default function({ crear = true, onClickBack, usuario = {} }: any): JSX.E
                             type='text'
                             id='userName'
                             label='Nombre'
-                            placeholder={usuario.nombre || 'Introduzca su nombre'}
+                            placeholder={'Introduzca su nombre'}
                             value={name}
                             onChange={(event: any) => setName(event.target.value)}
                         />
@@ -78,7 +110,7 @@ export default function({ crear = true, onClickBack, usuario = {} }: any): JSX.E
                             type='text'
                             id='primerApellido'
                             label='Primer apellido'
-                            placeholder={usuario.primerApellido || 'Introduzca su primer apellido'}
+                            placeholder={'Introduzca su primer apellido'}
                             value={firstSurname}
                             onChange={(event: any) => setFirstSurname(event.target.value)}
                         />
@@ -86,7 +118,7 @@ export default function({ crear = true, onClickBack, usuario = {} }: any): JSX.E
                             type='text'
                             id='segundoApellido'
                             label='Segundo apellido'
-                            placeholder={usuario.segundoApellido || 'Introduzca su segudo apellido'}
+                            placeholder={'Introduzca su segudo apellido'}
                             value={secondSurname}
                             onChange={(event: any) => setSecondSurname(event.target.value)}
                         />
@@ -94,7 +126,7 @@ export default function({ crear = true, onClickBack, usuario = {} }: any): JSX.E
                             type='text'
                             id='dni'
                             label='DNI'
-                            placeholder={usuario.dni || 'Introduzca su DNI'}
+                            placeholder={'Introduzca su DNI'}
                             value={dni}
                             onChange={(event: any) => setDni(event.target.value)}
                         />
@@ -102,7 +134,7 @@ export default function({ crear = true, onClickBack, usuario = {} }: any): JSX.E
                             type='date'
                             id='dateOfBirth'
                             label='Fecha de nacimiento'
-                            placeholder={usuario.fechaDeNacimiento || 'dd/mm/aaaa'}
+                            placeholder={'dd/mm/aaaa'}
                             value={dateOfBirth}
                             onChange={(event: any) => setDateOfBirth(event.target.value)}
                         />
@@ -110,7 +142,7 @@ export default function({ crear = true, onClickBack, usuario = {} }: any): JSX.E
                             type='text'
                             id='localidad'
                             label='localidad'
-                            placeholder={usuario.localidad || 'Introduzca su localidad'}
+                            placeholder={'Introduzca su localidad'}
                             value={location}
                             onChange={(event: any) => setLocation(event.target.value)}
                         />
@@ -120,7 +152,7 @@ export default function({ crear = true, onClickBack, usuario = {} }: any): JSX.E
                             type='text'
                             id='telefono'
                             label='Teléfono'
-                            placeholder={usuario.telefono || 'Introduzca su teléfono'}
+                            placeholder={'Introduzca su teléfono'}
                             value={telephone}
                             onChange={(event: any) => setTelephone(event.target.value)}
                         />
@@ -128,7 +160,7 @@ export default function({ crear = true, onClickBack, usuario = {} }: any): JSX.E
                             type='email'
                             id='email'
                             label='Email'
-                            placeholder={usuario.email || 'Introduzca su email'}
+                            placeholder={'Introduzca su email'}
                             value={email}
                             onChange={(event: any) => setEmail(event.target.value)}
                         />
@@ -144,7 +176,7 @@ export default function({ crear = true, onClickBack, usuario = {} }: any): JSX.E
                             type='text'
                             id='aspiraciones'
                             label='Aspiraciones'
-                            placeholder={usuario.aspiraciones || 'Introduzca sus aspiraciones'}
+                            placeholder={'Introduzca sus aspiraciones'}
                             value={aspirations}
                             onChange={(event: any) => setAspirations(event.target.value)}
                         />
@@ -152,7 +184,7 @@ export default function({ crear = true, onClickBack, usuario = {} }: any): JSX.E
                             type='text'
                             id='observaciones'
                             label='Observaciones'
-                            placeholder={usuario.observaciones || 'Introduzca sus observaciones'}
+                            placeholder={'Introduzca sus observaciones'}
                             value={observations}
                             onChange={(event: any) => setObservations(event.target.value)}
                         />
@@ -160,7 +192,7 @@ export default function({ crear = true, onClickBack, usuario = {} }: any): JSX.E
                             type='text'
                             id='rol'
                             label='Rol'
-                            placeholder={usuario.rol || 'Introduzca su rol'}
+                            placeholder={'Introduzca su rol'}
                             value={rol}
                             onChange={(event: any) => setRol(event.target.value)}
                         />

@@ -27,6 +27,7 @@ function quePaginaDebeSerRenderizada(): JSX.Element {
     const [hasCompletedSomeActivity, setHasCompletedSomeActivity] = useState<boolean>(false);
     const [isSuperuser, setIsSuperuser] = useState<boolean>(false);
     const currentNavigation = navigation[navigation.length - 1];
+    const [idUserToModify, setIdUserToModify] = useState<number>(0);
     let page: JSX.Element;
 
     function onPageChanged(page: any): void {
@@ -61,9 +62,10 @@ function quePaginaDebeSerRenderizada(): JSX.Element {
         setNavigation(copyNav);
     }
 
-    function goToModifyUser(): void {
+    function goToModifyUser(user: any): void {
         console.log('Se ha pedido modificar el usuario');
 
+		setIdUserToModify(user.id);
         onPageChanged(Pages.modificarUsuario);
     }
 
@@ -220,6 +222,7 @@ function quePaginaDebeSerRenderizada(): JSX.Element {
                 <CreateUser
                     onClickBack={onClickBack}
                     crear={false}
+                    id={idUserToModify}
                 />
             );
             break;
