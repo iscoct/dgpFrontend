@@ -44,10 +44,13 @@ function quePaginaDebeSerRenderizada(): JSX.Element {
     function onBook(proposal: any): void {
         switch (navigation[navigation.length - 1]) {
             case Pages.apuntarseActividad: {
-            	const url = `${serverUrl}api/apuntarse/${activityId}`;
+            	const url = `${serverUrl}api/actividades/apuntarse/${activityId}`;
         
             	fetch(url, {
             		method: 'PUT',
+            		headers: {
+						'Content-Type': 'application/json'
+					},
             		credentials: 'include'
             	}).then((res) => res.json()).then((jsonResponse) => {
             		console.log('Se ha propuesto la actividad');
@@ -57,11 +60,14 @@ function quePaginaDebeSerRenderizada(): JSX.Element {
                 
                 break;
             } case Pages.proponerFechaHoraActividad: {
-            	const url = `${serverUrl}api/proponerFechaLocalizacion/${activityId}`;
+            	const url = `${serverUrl}api/actividades/proponerFechaLocalizacion/${activityId}`;
             	const { date, time, location } = proposal;
 
 				fetch(url, {
 					method: 'PUT',
+					headers: {
+						'Content-Type': 'application/json'
+					},
 					body: JSON.stringify({
 						localizacion: location,
 						fecha: date
@@ -77,10 +83,13 @@ function quePaginaDebeSerRenderizada(): JSX.Element {
 				});
                 break;
             } case Pages.aceptarORechazarActividad: {
-            	const url = `${serverUrl}api/confirmarFechaLocalizacion/${activityId}`;
+            	const url = `${serverUrl}api/actividades/confirmarFechaLocalizacion/${activityId}`;
             	
             	fetch(url, {
             		method: 'PUT',
+            		headers: {
+						'Content-Type': 'application/json'
+					},
             		body: JSON.stringify({
             			cerrada: proposal.accepted
             		}),

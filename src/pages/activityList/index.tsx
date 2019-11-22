@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Typography, makeStyles, Chip, Grid } from '@material-ui/core';
+import { Image } from 'react-bootstrap';
 import Header from '../../components/header';
 
 import './activityList.scss';
@@ -31,7 +32,7 @@ export default function({ onClickBack, onClickActivity, realizadas = false }: an
 	}, []);
 	
 	function crearActividad(activity: any, onClickActivity: any) {
-		const { nombre, descripcion } = activity;
+		const { nombre, descripcion, imagen } = activity;
 
 		return (
 		    <Grid xs={8} classes={{ root: containerClass.actividad }} justify='center' item container>
@@ -55,6 +56,7 @@ export default function({ onClickBack, onClickActivity, realizadas = false }: an
 		        </Grid>
 		        <Grid onClick={() => onClickActivity(activity)} xs={4} container item>
 		            <Grid xs={12} item>
+		            	{imagen ? <Image src={`http:localhost:8000/images/${imagen}`} fluid /> : ''}
 		            </Grid>
 		            <Grid xs={12} item>
 		                <Chip label='Ver más'/>
