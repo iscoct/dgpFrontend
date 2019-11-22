@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Button } from '@material-ui/core';
 import { Form } from 'react-bootstrap';
 import { Container, Row, Col } from 'react-bootstrap';
@@ -9,22 +9,26 @@ import './createActivity.scss';
 export default function({ onClickBack }: any): JSX.Element {
 	const [eventName, setEventName] = useState<string>('');
 	const [eventDescription, setEventDescription] = useState<string>('');
-	const url = 'http://localhost:8000/api/actividades';
-
+	const fileInput: any = useRef(null);
+	
 	function createActivity() {
-		fetch(url, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({
-				nombre: eventName,
-				description: eventDescription
-			}),
-			credentials: 'include'
-		}).then(() => onClickBack()).catch(() =>
-			console.log('Ha habido algún error creando la actividad')
-		);
+		if (fileInput && fileInput.current && fileInput.current.files) {
+			const url = 'http://localhost:8000/api/actividades';
+			const file = fileInput.current.files[0];
+			const formData = new FormData();
+			
+			formData.append('nombre', eventName);
+			formData.append('descripcion', eventDescription);
+			formData.append('imagen', file, file.name);
+
+			fetch(url, {
+				method: 'POST',
+				body: formData,
+				credentials: 'include'
+			}).then(() => onClickBack()).catch(() =>
+				console.log('Ha habido algún error creando la actividad')
+			);
+		}
 	}
 
     return (
@@ -56,6 +60,15 @@ export default function({ onClickBack }: any): JSX.Element {
                             </Form.Group>
                         </Form>
                     </Col>
+                </Row>
+                <Row className="justify-content-md-center">
+                	<Col xs={6}>
+                		<input
+                			type='file'
+                			ref={fileInput}
+                			accept="image/png"
+                		/>
+                	</Col>
                 </Row>
                 <Row className="justify-content-md-center">
                     <Col xs={6}>

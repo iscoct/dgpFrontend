@@ -18,6 +18,7 @@ function quePaginaDebeSerRenderizada(): JSX.Element {
     const [navigation, setNavigation] = useState<Symbol[]>([Pages.home]);
     const [ratingVote, setRatingVote] = useState<number>(5);
     const [userName, setUserName] = useState<string>('');
+    const [userId, setUserId] = useState<string>('');
     const [userSurname, setUserSurname] = useState<string>('');
     const [userDateBirth, setUserDateBirth] = useState<string>('');
     const [userEmail, setUserEmail] = useState<string>('');
@@ -28,18 +29,28 @@ function quePaginaDebeSerRenderizada(): JSX.Element {
     const [isSuperuser, setIsSuperuser] = useState<boolean>(false);
     const currentNavigation = navigation[navigation.length - 1];
     const [idUserToModify, setIdUserToModify] = useState<number>(0);
+    const [activityName, setActivityName] = useState<string>('');
+    const [activityDescription, setActivityDescription] = useState<string>('');
+    const [proposalDate, setProposalDate] = useState<Date>(new Date());
+    const [proposalTime, setProposalTime] = useState<string>('');
+    const [proposalLocation, setProposalLocation] = useState<string>('');
     let page: JSX.Element;
 
     function onPageChanged(page: any): void {
         setNavigation(navigation.concat(page))
     }
 
-    function onBook(): void {
+    function onBook(proposal: any): void {
         switch (navigation[navigation.length - 1]) {
             case Pages.apuntarseActividad: {
                 onPageChanged(Pages.proponerFechaHoraActividad);
                 break;
             } case Pages.proponerFechaHoraActividad: {
+            	const { date, time, location } = proposal;
+
+            	setProposalDate(date);
+            	setProposalTime(time);
+            	setProposalLocation(location);
                 onPageChanged(Pages.aceptarORechazarActividad);
                 break;
             } case Pages.aceptarORechazarActividad: {
@@ -69,16 +80,17 @@ function quePaginaDebeSerRenderizada(): JSX.Element {
         onPageChanged(Pages.modificarUsuario);
     }
 
-    function voteActivity(): void {
-        console.log('Se ha pedido votar una actividad');
-
-        onPageChanged(Pages.votarActividad);
-    }
-
     function onClickVote(): void {
         console.log('Se ha votado');
     }
     
+    function onClickActivity(activity: any): void {
+	    onPageChanged(Pages.apuntarseActividad);
+	    
+	    setActivityName(activity.nombre);
+	    setActivityDescription(activity.descripcion);
+    }
+   
     function onClickIniciar(userLoginData: any): void {
     	const url = `${serverUrl}api/usuario`;
 
@@ -105,6 +117,7 @@ function quePaginaDebeSerRenderizada(): JSX.Element {
     				setUserPhone(usuario.telefono);
 					setUserObservations(usuario.observaciones);
 					setUserLocation(usuario.localidad);
+					setUserId(usuario.id);
 
 					if (usuario.rol === 'administrador') {
 						setIsSuperuser(true);
@@ -183,7 +196,7 @@ function quePaginaDebeSerRenderizada(): JSX.Element {
             page = (
                 <ActivityList
                     onClickBack = {onClickBack}
-                    onClickActivity = {() => onPageChanged(Pages.apuntarseActividad)}
+                    onClickActivity = {(activity: any) => onClickActivity(activity)}
                 />
             );
             break;
@@ -203,7 +216,11 @@ function quePaginaDebeSerRenderizada(): JSX.Element {
         case Pages.aceptarORechazarActividad: {
             page = (
                 <BookActivity
-                    description='Dummy description'
+                    description={activityDescription}
+                    date={proposalDate}
+                    time={proposalTime}
+                    location={proposalLocation}
+                    title={activityName}
                     onClickBack={onClickBack}
                     onClickBook={onBook}
                     phase={currentNavigation}
@@ -237,20 +254,9 @@ function quePaginaDebeSerRenderizada(): JSX.Element {
         } case Pages.actividadesRealizadas: {
             page = (
                 <ActivityList
-                    actividades = {[
-                        {
-                            categoria: 'Dummy categoria',
-                            title: 'Dummy title',
-                            description: 'Dummy description'
-                        },
-                        {
-                            categoria: 'Dummy categoria',
-                            title: 'Dummy title',
-                            description: 'Dummy description'
-                        }
-                    ]}
+                	id={userId}
                     onClickBack = {onClickBack}
-                    onClickActivity = {voteActivity}
+                    onClickActivity = {(activity: any) => onClickActivity(activity)}
                 />
             );
             break;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Header from '../../components/header';
 import { Form, Button } from 'react-bootstrap';
 import { Grid } from '@material-ui/core';
@@ -28,6 +28,7 @@ export default function({ crear = true, onClickBack, id }: any): JSX.Element {
 	const [observations, setObservations] = useState<string>('');
 	const [rol, setRol] = useState<string>('');
 	const [dateOfBirth, setDateOfBirth] = useState<Date>(new Date());
+	const fileInput: any = useRef(null);
 	const baseUrl = 'http://localhost:8000/';
 
 	useEffect(() => {
@@ -36,9 +37,6 @@ export default function({ crear = true, onClickBack, id }: any): JSX.Element {
 			
 			fetch(url, {
 				method: 'GET',
-				headers: {
-					'Content-Type': 'application/json'
-				},
 				credentials: 'include'
 			}).then((res) => res.json()).then(({ usuario }: any) => {
 				setName(usuario.nombre);
@@ -58,34 +56,37 @@ export default function({ crear = true, onClickBack, id }: any): JSX.Element {
 	}, []);
 
 	function onClick() {
-		const url = `${baseUrl}api/usuario${crear ? '/nuevo' : ''}`;
-		const method = crear ? 'POST' : 'PUT';
-
-		fetch(url, {
-			method,
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({
-				nombre: name,
-				apellido1: firstSurname,
-				apellido2: secondSurname,
-				DNI: dni,
-				localidad: location,
-				email,
-				telefono: telephone,
-				aspiraciones: aspirations,
-				observaciones: observations,
-				fecha_nacimiento: dateOfBirth,
-				password,
-				rol
-			}),
-			credentials: 'include'
-		}).then((res) => res.json()).then((jsonResponse: any) => {
-			console.log(`Se ha creado el usuario correctamente`);
+		if (fileInput && fileInput.current && fileInput.current.files) {
+			const url = `${baseUrl}api/usuario${crear ? '/nuevo' : '/modificar'}`;
+			const method ='POST';
+			const formData = new FormData();
+			const file = fileInput.current.files[0];
 			
-			onClickBack();
-		});
+			formData.append('nombre', name);
+			formData.append('rol', rol);
+			formData.append('apellido1', firstSurname);
+			formData.append('apellido2', secondSurname);
+			formData.append('DNI', dni);
+			formData.append('fecha_nacimiento', dateOfBirth.toString());
+			formData.append('localidad', location);
+			formData.append('email', email);
+			formData.append('telefono', telephone);
+			formData.append('aspiraciones', aspirations);
+			formData.append('observaciones', observations);
+			formData.append('password', password);
+			formData.append('imagen', file, file.name);
+			formData.append('id', id);
+
+			fetch(url, {
+				method,
+				body: formData,
+				credentials: 'include'
+			}).then((res) => res.json()).then((jsonResponse: any) => {
+				console.log(`Se ha creado el usuario correctamente`);
+				
+				onClickBack();
+			});
+		}
 	}
 
     return (
@@ -110,7 +111,7 @@ export default function({ crear = true, onClickBack, id }: any): JSX.Element {
                             type='text'
                             id='primerApellido'
                             label='Primer apellido'
-                            placeholder={'Introduzca su primer apellido'}
+                            placeholder='Introduzca su primer apellido'
                             value={firstSurname}
                             onChange={(event: any) => setFirstSurname(event.target.value)}
                         />
@@ -196,6 +197,13 @@ export default function({ crear = true, onClickBack, id }: any): JSX.Element {
                             value={rol}
                             onChange={(event: any) => setRol(event.target.value)}
                         />
+                    </Grid>
+                    <Grid xs={12} container item justify='center'>
+                    	<input
+                    		type='file'
+                    		ref={fileInput}
+                    		accept="image/png"
+                    	/>
                     </Grid>
                     <Grid xs={12} container item justify='center'>
                         <Button
