@@ -4,7 +4,7 @@ import Header from '../../components/header';
 
 import './activityList.scss';
 
-export default function({ onClickBack, onClickActivity, id = '' }: any): JSX.Element {
+export default function({ onClickBack, onClickActivity, realizadas = true }: any): JSX.Element {
 	const [activities, setActivities] = useState<any[]>([]);
 	const typographyClasses = makeStyles({
         h6: {
@@ -17,7 +17,7 @@ export default function({ onClickBack, onClickActivity, id = '' }: any): JSX.Ele
             marginTop: '5%'
         }
     })();
-	const url = `http://localhost:8000/api/actividades${id ? `/${id}` : ''}`;
+	const url = `http://localhost:8000/api/actividades${realizadas ? `/terminadas` : ''}`;
 
 	useEffect(() => {
 		fetch(url, {

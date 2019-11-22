@@ -18,7 +18,6 @@ function quePaginaDebeSerRenderizada(): JSX.Element {
     const [navigation, setNavigation] = useState<Symbol[]>([Pages.home]);
     const [ratingVote, setRatingVote] = useState<number>(5);
     const [userName, setUserName] = useState<string>('');
-    const [userId, setUserId] = useState<string>('');
     const [userSurname, setUserSurname] = useState<string>('');
     const [userDateBirth, setUserDateBirth] = useState<string>('');
     const [userEmail, setUserEmail] = useState<string>('');
@@ -31,6 +30,7 @@ function quePaginaDebeSerRenderizada(): JSX.Element {
     const [idUserToModify, setIdUserToModify] = useState<number>(0);
     const [activityName, setActivityName] = useState<string>('');
     const [activityDescription, setActivityDescription] = useState<string>('');
+    const [activityId, setActivityId] = useState<string>('');
     const [proposalDate, setProposalDate] = useState<Date>(new Date());
     const [proposalTime, setProposalTime] = useState<string>('');
     const [proposalLocation, setProposalLocation] = useState<string>('');
@@ -81,12 +81,30 @@ function quePaginaDebeSerRenderizada(): JSX.Element {
     }
 
     function onClickVote(): void {
-        console.log('Se ha votado');
+    	const url = `${serverUrl}api/actividades/valorar/${activityId}`;
+    	
+		fetch(url, {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				puntuacion: ratingVote
+			}),
+			credentials: 'include'
+		}).then((res) => res.json()).then((jsonResponse) => {
+			console.log('Votación correcta');
+			
+			onClickBack();
+		});
     }
     
-    function onClickActivity(activity: any): void {
-	    onPageChanged(Pages.apuntarseActividad);
+    function onClickActivity(activity: any, realizada = false): void {
+  		const nextPage = realizada ? Pages.votarActividad : Pages.apuntarseActividad;
+
+	    onPageChanged(nextPage);
 	    
+	    setActivityId(activity.id_actividad);
 	    setActivityName(activity.nombre);
 	    setActivityDescription(activity.descripcion);
     }
@@ -117,7 +135,6 @@ function quePaginaDebeSerRenderizada(): JSX.Element {
     				setUserPhone(usuario.telefono);
 					setUserObservations(usuario.observaciones);
 					setUserLocation(usuario.localidad);
-					setUserId(usuario.id);
 
 					if (usuario.rol === 'administrador') {
 						setIsSuperuser(true);
@@ -254,16 +271,16 @@ function quePaginaDebeSerRenderizada(): JSX.Element {
         } case Pages.actividadesRealizadas: {
             page = (
                 <ActivityList
-                	id={userId}
+                	realizadas={true}
                     onClickBack = {onClickBack}
-                    onClickActivity = {(activity: any) => onClickActivity(activity)}
+                    onClickActivity = {(activity: any) => onClickActivity(activity, true)}
                 />
             );
             break;
         } case Pages.votarActividad:{
             page = (
                 <VoteActivity
-                    description='Dummy description'
+                    description={activityDescription}
                     onClickBack={onClickBack}
                     ratingValue={ratingVote}
                     onClickVote={onClickVote}
