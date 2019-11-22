@@ -4,7 +4,7 @@ import Header from '../../components/header';
 
 import './activityList.scss';
 
-export default function({ onClickBack, onClickActivity, realizadas = true }: any): JSX.Element {
+export default function({ onClickBack, onClickActivity, realizadas = false }: any): JSX.Element {
 	const [activities, setActivities] = useState<any[]>([]);
 	const typographyClasses = makeStyles({
         h6: {

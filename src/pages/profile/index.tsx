@@ -7,7 +7,7 @@ import Sidedrawer from '../../components/sidedrawer';
 import './profile.scss';
 
 export default function(props: any): JSX.Element {
-    const { nombre, localidad, dateBirth, email, telefono, observations, acciones } = props;
+    const { nombre, localidad, dateBirth, email, telefono, observations, acciones, imagen } = props;
     const typographyClasses = makeStyles({
         h4: {
             color: 'white'
@@ -27,6 +27,8 @@ export default function(props: any): JSX.Element {
             opened: !state.opened
         });
     };
+	const avatar = imagen ?
+		<Avatar src={`http://localhost:8000/images/${imagen}`} /> : <Avatar>?</Avatar>;
 
     return (
         <React.Fragment>
@@ -34,7 +36,7 @@ export default function(props: any): JSX.Element {
             <Sidedrawer opened={state.opened} toggle={toggle} acciones={acciones} />
             <Container className='profileContainer'>
                 <Row className='avatar profileRow'>
-                    <Avatar>Cotan</Avatar>
+                    {avatar}
                 </Row>
                 <Row className='personalData profileRow'>
                     <Typography classes={{ h4: typographyClasses.h4 }} variant='h4'>{nombre}</Typography>

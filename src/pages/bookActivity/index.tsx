@@ -58,12 +58,12 @@ export default function({ title, description, onClickBack, onClickBook, date, ti
 				    </Grid>
 				    <Grid xs={12} spacing={4} container item>
 				        <Grid xs={6} justify='flex-end' container item>
-				            <Button onClick={onClickBook} size='lg' variant='success'>
+				            <Button onClick={() => onClickBook({ accepted: true })} size='lg' variant='success'>
 				                Aceptar
 				            </Button>
 				        </Grid>
 				        <Grid xs={6} justify='flex-start' container item>
-				            <Button onClick={onClickBook} size='lg' variant='danger'>
+				            <Button onClick={() => onClickBook({ accepted: false })} size='lg' variant='danger'>
 				                Rechazar
 				            </Button>
 				        </Grid>

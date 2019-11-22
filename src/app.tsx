@@ -23,6 +23,7 @@ function quePaginaDebeSerRenderizada(): JSX.Element {
     const [userEmail, setUserEmail] = useState<string>('');
     const [userPhone, setUserPhone] = useState<string>('');
     const [userObservations, setUserObservations] = useState<string>('');
+    const [userImage, setUserImage] = useState<string>('');
     const [userLocation, setUserLocation] = useState<string>('');
     const [hasCompletedSomeActivity, setHasCompletedSomeActivity] = useState<boolean>(false);
     const [isSuperuser, setIsSuperuser] = useState<boolean>(false);
@@ -43,24 +44,56 @@ function quePaginaDebeSerRenderizada(): JSX.Element {
     function onBook(proposal: any): void {
         switch (navigation[navigation.length - 1]) {
             case Pages.apuntarseActividad: {
-                onPageChanged(Pages.proponerFechaHoraActividad);
+            	const url = `${serverUrl}api/apuntarse/${activityId}`;
+        
+            	fetch(url, {
+            		method: 'PUT',
+            		credentials: 'include'
+            	}).then((res) => res.json()).then((jsonResponse) => {
+            		console.log('Se ha propuesto la actividad');
+
+            		onPageChanged(Pages.proponerFechaHoraActividad);
+            	});
+                
                 break;
             } case Pages.proponerFechaHoraActividad: {
+            	const url = `${serverUrl}api/proponerFechaLocalizacion/${activityId}`;
             	const { date, time, location } = proposal;
 
-            	setProposalDate(date);
-            	setProposalTime(time);
-            	setProposalLocation(location);
-                onPageChanged(Pages.aceptarORechazarActividad);
+				fetch(url, {
+					method: 'PUT',
+					body: JSON.stringify({
+						localizacion: location,
+						fecha: date
+					}),
+					credentials: 'include'
+				}).then((res) => res.json()).then((jsonResponse) => {
+					console.log('Se ha propuesto fecha y hora');
+					
+					setProposalDate(date);
+		        	setProposalTime(time);
+		        	setProposalLocation(location);
+		            onPageChanged(Pages.aceptarORechazarActividad);
+				});
                 break;
             } case Pages.aceptarORechazarActividad: {
-                const copyNav = navigation.concat([]);
-                const pageToSignedintoActivity = 3;
+            	const url = `${serverUrl}api/confirmarFechaLocalizacion/${activityId}`;
+            	
+            	fetch(url, {
+            		method: 'PUT',
+            		body: JSON.stringify({
+            			cerrada: proposal.accepted
+            		}),
+            		credentials: 'include'
+            	}).then((res) => res.json()).then((jsonResponse) => {
+            		const copyNav = navigation.concat([]);
+		            const pageToSignedintoActivity = 3;
 
-                copyNav.splice(navigation.length - pageToSignedintoActivity,
-                    pageToSignedintoActivity);
-                
-                setNavigation(copyNav);
+		            copyNav.splice(navigation.length - pageToSignedintoActivity,
+		                pageToSignedintoActivity);
+		            
+		            setNavigation(copyNav);
+            	});
             }
         }
     }
@@ -133,6 +166,7 @@ function quePaginaDebeSerRenderizada(): JSX.Element {
     				setUserDateBirth(usuario.fecha_nacimiento);
     				setUserEmail(usuario.email);
     				setUserPhone(usuario.telefono);
+    				setUserImage(usuario.imagen);
 					setUserObservations(usuario.observaciones);
 					setUserLocation(usuario.localidad);
 
@@ -199,6 +233,7 @@ function quePaginaDebeSerRenderizada(): JSX.Element {
                     nombre={`${userName} ${userSurname}`}
                     localidad={userLocation}
                     dateBirth={userDateBirth}
+                    imagen={userImage}
                     email={userEmail}
                     telefono={userPhone}
                     observations={userObservations}

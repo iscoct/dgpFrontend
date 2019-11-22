@@ -1,17 +1,14 @@
 import React from 'react';
-import { Drawer, List, ListItem, ListItemText, ListItemIcon } from '@material-ui/core';
-import { NavigateNext } from '@material-ui/icons';
+import { Drawer } from '@material-ui/core';
+import { Nav } from 'react-bootstrap';
 
 export default function({ opened, toggle, acciones }: any): JSX.Element {
     const list: JSX.Element = acciones ? (
-        <List>
-            {acciones.map((action: any) => (
-                <ListItem onClick={action.onClick} key={action.text}>
-                    <ListItemIcon><NavigateNext /></ListItemIcon>
-                    <ListItemText primary={action.text} />
-                </ListItem>
+        <Nav className='flex-column'>
+            {acciones.map((action: any, index: number) => (
+                <Nav.Link eventKey={index} onClick={action.onClick}>{action.text}</Nav.Link>
             ))}
-        </List>
+        </Nav>
     ) : <React.Fragment></React.Fragment>;
 
     return (
