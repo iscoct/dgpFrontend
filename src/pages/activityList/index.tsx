@@ -39,6 +39,7 @@ export default function({ onClickBack, onClickActivity, realizadas = false }: an
 		        <Grid xs={8} container item>
 		            <Grid xs={12} container item>
 		                <Typography
+		                	className='bold--name'
 		                    classes={{ h6: typographyClasses.h6 }}
 		                    variant='h6'
 		                >
@@ -59,7 +60,7 @@ export default function({ onClickBack, onClickActivity, realizadas = false }: an
 		            	{imagen ? <Image src={`http:localhost:8000/images/${imagen}`} fluid /> : ''}
 		            </Grid>
 		            <Grid xs={12} item>
-		                <Chip label='Ver más'/>
+		                <Chip className='activity--chip' label='Ver más'/>
 		            </Grid>
 		        </Grid>
 		    </Grid>

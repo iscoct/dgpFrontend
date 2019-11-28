@@ -5,15 +5,16 @@
 .profileRow {
     justify-content: center;
 
-    &.avatar {
-        margin-top: 10%;
-    }
-
-    &.personalData {
-        margin-top: 10%;
-    }
-
+	&.personalData {
+		margin-top: 6px;
+		margin-bottom: 6px;
+		
+		&:first-child {
+			margin-top: 32px;
+		}
+	}
+	
     &.description {
-        margin-top: 15%;
+        margin-top: 10%;
     }
 }

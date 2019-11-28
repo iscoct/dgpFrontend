@@ -1,7 +1,19 @@
-.book-activity.btn {
+.book__activity.btn {
     background: linear-gradient(#BE6F03, #FF9301);
 }
 
 .MuiTypography-root.white {
     color: white;
+}
+
+.book__activity--section.MuiGrid-item {
+	margin-top: 3.5%;
+}
+
+.MuiGrid-root.book__activity--body.MuiGrid-container.MuiGrid-justify-xs-center {
+	margin-top: 5%;
+}
+
+.MuiGrid-root.book__activity--section.MuiGrid-container.MuiGrid-justify-xs-center {
+	margin-top: 5%;
 }

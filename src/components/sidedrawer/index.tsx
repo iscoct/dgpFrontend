@@ -1,6 +1,7 @@
 import React from 'react';
 import { Drawer } from '@material-ui/core';
 import { Nav } from 'react-bootstrap';
+import './sidedrawer.scss';
 
 export default function({ opened, toggle, acciones }: any): JSX.Element {
     const list: JSX.Element = acciones ? (

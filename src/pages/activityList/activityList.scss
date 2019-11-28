@@ -3,6 +3,23 @@
     justify-content: center;
 }
 
-.MuiGrid-root.MuiGrid-container.MuiGrid-item.MuiGrid-grid-xs-8 {
-    margin-bottom: 5%;
+.MuiTypography-root.bold--name {
+	font-weight: bold;
+}
+
+.MuiChip-root.activity--chip {
+	color: white;
+	background-color: #707070;
+}
+
+.activityWrapper {
+
+	&:first-of-type:first-child {
+		margin-top: 5%;
+	}
+
+	&:first-child {
+		margin-top: 2.5%;
+		margin-bottom: 2.5%;
+	}
 }

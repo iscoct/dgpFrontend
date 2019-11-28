@@ -65,6 +65,7 @@ export default function({ onClickBack }: any): JSX.Element {
                 	<Col xs={6}>
                 		<input
                 			type='file'
+                			className='create__activity--file__input'
                 			ref={fileInput}
                 			accept="image/png"
                 		/>

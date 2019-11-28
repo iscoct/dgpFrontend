@@ -38,19 +38,19 @@ export default function(props: any): JSX.Element {
                 <Row className='avatar profileRow'>
                     {avatar}
                 </Row>
-                <Row className='personalData profileRow'>
+                <Row className='profileRow personalData'>
                     <Typography classes={{ h4: typographyClasses.h4 }} variant='h4'>{nombre}</Typography>
                 </Row>
-                <Row className='profileRow'>
+                <Row className='profileRow personalData'>
                     <Typography classes={{ h5: typographyClasses.h5 }} variant='h5'>{localidad}</Typography>
                 </Row>
-                <Row className='profileRow'>
+                <Row className='profileRow personalData'>
                     <Typography classes={{ h5: typographyClasses.h5 }} variant='h5'>{dateBirth}</Typography>
                 </Row>
-                <Row className='profileRow'>
+                <Row className='profileRow personalData'>
                     <Typography classes={{ h5: typographyClasses.h5 }} variant='h5'>{email}</Typography>
                 </Row>
-                <Row className='profileRow'>
+                <Row className='profileRow personalData'>
                     <Typography classes={{ h5: typographyClasses.h5 }} variant='h5'>{telefono}</Typography>
                 </Row>
                 <Row className='description profileRow'>

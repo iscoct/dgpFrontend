@@ -27,10 +27,10 @@ export default function({ title, description, onClickBack, onClickBook, date, ti
 
 		function signingIntoActivity(onClickBook: any): JSX.Element {
 			return (
-				<Grid item>
+				<Grid item className='book__activity--section'>
 				    <Button
 				        onClick={onClickBook}
-				        className='book-activity'
+				        className='book__activity'
 				    >
 				        Apuntarse
 				    </Button>
@@ -40,7 +40,7 @@ export default function({ title, description, onClickBack, onClickBook, date, ti
 		
 		function acceptOrRejectActivity(onClickBook: any): JSX.Element {
 			return (
-				<Grid container justify='center'>
+				<Grid className='book__activity--section' container justify='center'>
 				    <Grid xs={12} justify='center' container item>
 				        <Typography style={{ color: 'white' }}>
 				            Fecha Propuesta: {date}
@@ -74,7 +74,7 @@ export default function({ title, description, onClickBack, onClickBook, date, ti
 		
 		function createDataProposal(onClickBook: any): JSX.Element {
 			return (
-				<Grid container justify='center'>
+				<Grid className='book__activity--section' container justify='center'>
 					<Form>
 					    <Input
 					    	type='date'
@@ -107,7 +107,7 @@ export default function({ title, description, onClickBack, onClickBook, date, ti
 										date, time, location
 									}
 								)}
-								className='book-activity'
+								className='book__activity'
 							>
 							    Proponer
 							</Button>
@@ -142,7 +142,7 @@ export default function({ title, description, onClickBack, onClickBook, date, ti
                 icon='arrow_back'
                 onIconClick={onClickBack}
             />
-            <Grid container justify='center'>
+            <Grid className='book__activity--body' container justify='center'>
                 <Grid container justify='center' item>
                     <Typography style={{ color: 'white' }}>
                         {description}
