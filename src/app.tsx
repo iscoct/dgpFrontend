@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Pages, { Home, Profile, CreateActivity, AssessmentActivity,
-    UserData, UserManagement, ActivityList } from './pages';
+    UserData, UserManagement, ActivityList, SeeActivity } from './pages';
 import { login as remoteLogin } from './interactionsWithServer';
 import _ from 'lodash';
 
@@ -36,6 +36,14 @@ export default function App(): JSX.Element {
         setNavigation(newNavigation);
     }
 
+    function onSeeActivity() {
+        console.log("An activity was clicked");
+
+        const newNavigation = navigation.concat([Pages.seeActivity]);
+
+        setNavigation(newNavigation);
+    }
+
     switch (navigation[navigation.length - 1]) {
         case Pages.home: {
             currentPage = (
@@ -52,7 +60,7 @@ export default function App(): JSX.Element {
                     name="Tomás Santos Ortega"
                     location="Pulianas, Granada"
                     age={23}
-                    isAdmin={true}
+                    isAdmin={false}
                     onClick={
                         (page: any) => setNavigation(navigation.concat([page]))
                     }
@@ -116,7 +124,7 @@ export default function App(): JSX.Element {
                         ]
                     }
                     onClickBack={onPageBack}
-                    onClickActivity={() => console.log('An activity was clicked')}
+                    onClickActivity={onSeeActivity}
                     page='proposeByUser'
                 />
             );
@@ -172,7 +180,7 @@ export default function App(): JSX.Element {
                         ]
                     }
                     onClickBack={onPageBack}
-                    onClickActivity={() => console.log('An activity was clicked')}
+                    onClickActivity={() => setNavigation(navigation.concat([Pages.adminSeeActivity]))}
                     page='madeByVolunteer'
                 />
             );
@@ -181,7 +189,65 @@ export default function App(): JSX.Element {
         case Pages.assessmentActivity: {
             currentPage = (
                 <AssessmentActivity
-                
+                    onClickBack={onPageBack}
+                    title="Título de la actividad"
+                    description="Dummy description"
+                    volunteerName="Dummy volunteer name"
+                    onClickVote={() => console.log("It wanted to vote an activity")}
+                />
+            );
+            break;
+        }
+        case Pages.seeActivity: {
+            currentPage = (
+                <SeeActivity
+                    onClickBack={onPageBack}
+                    localization="Calle Madrid, Granada"
+                    date={new Date()}
+                    participants={["Juan Fernández Ortiz"]}
+                    onClick={() => console.log("On see activity click")}
+                />
+            );
+
+            break;
+        }
+        case Pages.signUpIntoActivity: {
+            currentPage = (
+                <SeeActivity
+                    onClickBack={onPageBack}
+                    localization="Calle Elvira Junto Hipercor"
+                    date={new Date()}
+                    participants={["Juan Fernández Ortiz"]}
+                    onClick={() => console.log("On sign up activity")}
+                />
+            );
+
+            break;
+        }
+        case Pages.adminSeeActivity: {
+            currentPage = (
+                <SeeActivity
+                    onClickBack={onPageBack}
+                    localization="Calle Elvira Junto Hipercor"
+                    date={new Date()}
+                    participants={["Juan Fernández Ortiz"]}
+                    page="adminSee"
+                    assessments={
+                        [
+                            {
+                                userName: "Juan Fernández López",
+                                rate: 4,
+                                rol: "Socio",
+                                description: "Me ha gustado la actividad, el voluntario era incluso demasiado simpático jeje, repetiré"
+                            },
+                            {
+                                userName: "Juan Fernández López",
+                                rate: 4,
+                                rol: "Socio",
+                                description: "Me ha gustado la actividad, el voluntario era incluso demasiado simpático jeje, repetiré"
+                            }
+                        ]
+                    }
                 />
             );
             break;

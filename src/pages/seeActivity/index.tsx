@@ -37,7 +37,9 @@ function ButtonSection(props: any): JSX.Element {
     );
 }
 
-function Assessment(): JSX.Element {
+function Assessment({ data }: any): JSX.Element {
+    const { userName, rate, description, rol } = data;
+
     return (
         <Grid className="vote--section" xs={8} container item justify="center">
             <Grid xs={12} container item justify="flex-start">
@@ -45,32 +47,37 @@ function Assessment(): JSX.Element {
             </Grid>
             <Grid xs={12} className="user-information" container item justify="center">
                 <Grid xs={4} container item>
-                    Juan Fernández López
+                    {userName}
                 </Grid>
                 <Grid className="activity--rate" xs={4} container item>
-                    <Rating value={4} readOnly={true} />
+                    <Rating value={rate} readOnly={true} />
                 </Grid>
                 <Grid xs={4} container item>
-                    Socio
+                    {rol}
                 </Grid>
             </Grid>
             <Grid className="comment--activity" xs={12} container item justify="center">
-                Me ha gustado mucho la actividad, el voluntario era incluso demasiado simpático jeje, repetiré
+                {description}
             </Grid>
         </Grid>
     );
 }
 
-function AdminSection(): JSX.Element {
+function AdminSection({ assessments }: any): JSX.Element {
     return (
         <Grid className="admin--section" xs={12} container item justify="center">
-            <Assessment />
-            <Assessment />
+            {
+                assessments.map((assessment: any, index: number) => (
+                    <Assessment key={index} data={assessment} />
+                ))
+            }
         </Grid>
     );
 }
+
 export default function SeeActivity(props: any): JSX.Element {
-    const { onClickBack, onClick, participants, date, localization, mustShowButton = true } = props;
+    const { onClickBack, onClick, participants, date, assessments,
+        localization, mustShowButton = true } = props;
     const page: 'see' | 'signUp' | 'adminSee' = props.page || 'see';
     const possiblyTitle = {
         see: 'Ver',
@@ -102,7 +109,7 @@ export default function SeeActivity(props: any): JSX.Element {
             </Typography>
             {mustShowButton && page !== "adminSee" ?
                 <ButtonSection onClick={onClick} page={page} /> : ''}
-            {page === 'adminSee' ? <AdminSection /> : ''}
+            {page === 'adminSee' ? <AdminSection assessments={assessments} /> : ''}
         </React.Fragment>
     );
 }

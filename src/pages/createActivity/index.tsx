@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Button } from '../../components/';
 import { Container, Row, Col } from 'react-bootstrap';
 import { Header, TextField, Meeting } from '../../components';
@@ -59,6 +59,7 @@ export default function({ onClickBack, onClick }: any): JSX.Element {
     const [eventLocation, setEventLocation] = useState<string>('');
     const [isGrupalActivity, setGrupalActivity] = useState<boolean>(false);
     const [eventDate, setEventDate] = useState<Date>(new Date());
+    const fileInput: any = useRef(null);
 
     return (
         <React.Fragment>
@@ -69,7 +70,10 @@ export default function({ onClickBack, onClick }: any): JSX.Element {
             />
             <Container>
                 <FormattedRow>
-                    <AddAPhoto className="add-photo--icon" />
+                    <label htmlFor="activity--image">
+                        <AddAPhoto className="add-photo--icon" />
+                    </label>
+                    <input ref={fileInput} id="activity--image" type="file" />
                 </FormattedRow>
                 <FormattedRow>
                     <TextField
