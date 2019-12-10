@@ -1,0 +1,13 @@
+@use "../../styles/base/variables" as *;
+
+#react-container > .MuiToolbar-root.MuiToolbar-regular.MuiToolbar-gutters {
+    color: $company-color;
+}
+
+.material-icons.MuiIcon-root {
+    font-size: 3rem;
+}
+
+.header--toolbar.MuiToolbar-root {
+    margin-top: 1rem;
+}

@@ -1,7 +1,74 @@
-.form-label {
+@use "../../styles/base/variables" as *;
+
+.MuiSvgIcon-root.add-photo--icon {
+    width: 40%;
+    height: 7rem;
+    background-color: $company-color;
+    border-radius: 20px;
+    padding-top: 16px;
+    padding-bottom: 16px;
     color: white;
+    margin-top: 0.5rem;
 }
 
-.create__activity--file__input {
-	color: white;
+.justify-content-md-center > .col-6 {
+    text-align: center;
+}
+
+.MuiButtonBase-root.MuiCheckbox-colorSecondary.Mui-checked {
+    color: $company-marked-color;
+}
+
+.col-6.grupal--checkbox {
+    border-style: solid;
+    border-color: rgba(0, 0, 0, 0.23);
+    border-width: 1px;
+    border-radius: 4px;
+    max-width: 47.5%;
+}
+
+.col-8 .MuiInput-underline::before {
+    content: none;
+}
+
+.MuiFormControl-root.MuiTextField-root {
+    width: 100%;
+}
+
+.label-title--section.col-6 {
+    font-size: 1.5rem;
+    color: $company-color;
+    text-align: center;
+}
+
+.label--section.container {
+    border-style: solid;
+    border-width: 1px;
+    border-color: $company-color;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+
+.label-input--section {
+    & .MuiFormHelperText-root {
+        color: $company-color;
+        text-align: center;
+        font-size: 1.5rem;
+    }
+
+    &.col-4 {
+        margin-top: 1rem;
+    }
+}
+
+.col-6 .MuiIconButton-colorSecondary:hover {
+    background-color: $company-marked-color-with-transparency;
+}
+
+.col-6 .MuiCheckbox-colorSecondary.Mui-checked:hover {
+    background-color: $company-marked-color-with-transparency;
+}
+
+.justify-content-md-center {
+    margin-top: 1rem;
 }

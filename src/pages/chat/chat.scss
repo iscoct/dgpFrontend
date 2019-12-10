@@ -1,0 +1,61 @@
+@use "../../styles/base/variables" as *;
+
+.MuiSvgIcon-root.chat--icon {
+    font-size: 10rem;
+    color: $company-color;
+}
+
+.MuiGrid-root.other-user-name--section {
+    font-size: 1.5rem;
+    color: $company-color;
+}
+
+.MuiGrid-root.chat--section {
+    border-style: solid;
+    border-width: 1px;
+    border-color: $company-color;
+    margin-top: 2rem;
+
+    .write-message--section {
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+
+        .MuiButtonBase-root {
+            margin-left: 0.75rem;
+            margin-right: 0.75rem;
+        }
+
+        .mic--icon {
+            font-size: 2.5rem;
+        }
+
+        .text--input {
+            margin-left: 0.75rem;
+            margin-right: 0.75rem;
+        }
+    }
+}
+
+%message {
+    margin-top: 1rem;
+    margin-right: 2rem;
+    margin-left: 2rem;
+    padding: 0.75rem;
+    border-radius: 1rem;
+}
+
+.MuiGrid-root {
+    & > .hisMessage {
+        @extend %message;
+
+        color: white;
+        background-color: $company-color;
+    }
+
+    & > .ownMessage {
+        @extend %message;
+
+        color: $company-color;
+        background-color: white;
+    }
+}

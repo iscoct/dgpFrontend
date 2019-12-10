@@ -5,7 +5,6 @@ const Fiber = require('fibers');
 const htmlWebpackPlugin = require("html-webpack-plugin");
 const htmlBeatifyWebpackPlugin = require("html-beautify-webpack-plugin");
 const DynCdnWebpackPlugin = require('dynamic-cdn-webpack-plugin');
-const CopyPlugin = require('copy-webpack-plugin');
 
 const galleryConfig = {
     mode: "development",
@@ -59,17 +58,7 @@ const galleryConfig = {
                 ]
             },
             {
-                test: /\.(woff(2)?|ttf|eot)(\?.*$|$)/,
-                use: [{
-                    loader: 'file-loader',
-                    options: {
-                        name: '[name].[ext]',
-                        outputPath: './style/fonts'
-                    }
-                }]
-            },
-            {
-                test: /\.(svg|jpg|png)(\?v=\d+\.\d+\.\d+)?$/,
+                test: /\.(svg|jpe?g|png)(\?v=\d+\.\d+\.\d+)?$/,
                 use: [{
                     loader: 'file-loader',
                     options: {

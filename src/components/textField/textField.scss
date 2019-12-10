@@ -1,0 +1,16 @@
+@use "../../styles/base/variables" as *;
+
+.text--input {
+    & > .MuiFormLabel-root.Mui-focused, & .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+        color: $company-marked-color;
+        border-color: $company-marked-color;
+    }
+}
+
+.MuiFormControl-root.text--input {
+    width: 100%;
+}
+
+.MuiInputBase-root.MuiOutlinedInput-root {
+    background-color: initial;
+}

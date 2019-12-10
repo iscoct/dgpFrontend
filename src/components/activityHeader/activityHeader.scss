@@ -1,0 +1,31 @@
+@use "../../styles/base/variables" as *;
+
+.comment--section .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+    border-color: $company-marked-color;
+}
+
+.MuiInputBase-root.MuiOutlinedInput-root {
+    background-color: white;
+}
+
+.comment--section.MuiGrid-container {
+    margin-top: 1.2rem;
+}
+
+.comment--section > .MuiTextField-root {
+    justify-content: center;
+    margin-right: 8px;
+}
+
+.MuiGrid-root .MuiSvgIcon-root.group--icon {
+    width: 9rem;
+    height: 9rem;
+    color: $company-color;
+    margin-left: 8px;
+}
+
+.MuiTypography-root.activity--typography {
+    color: $company-color;
+    text-align: center;
+    margin-top: 1rem;
+}

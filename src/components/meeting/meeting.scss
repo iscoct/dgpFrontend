@@ -1,0 +1,40 @@
+@use "../../styles/base/variables" as *;
+
+.col-8 .MuiInput-underline.Mui-focused, .col-8 .MuiInput-underline:before, .col-8 .MuiInput-underline:after {
+    border-bottom: 1px solid $company-marked-color;
+}
+
+.col-4 .MuiInput-underline.Mui-focused, .col-4 .MuiInput-underline:before, .col-4 .MuiInput-underline:after, .col-4 .MuiInput-underline:hover {
+    border-bottom: 1px solid $company-marked-color;
+}
+
+.col-4 .MuiInput-underline:hover:not(.Mui-disabled):before {
+    border-bottom: 1px solid $company-marked-color;
+}
+
+.location--section {
+    align-items: center;
+}
+
+.location--icon.col-1 {
+    padding-left: 0px;
+}
+
+.location--input.col-7 {
+    max-width: 56%;
+    padding-left: 0px;
+}
+
+.location-date--section.container {
+    border: solid 1px $company-color;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+
+    .MuiInputBase-input.MuiInput-input {
+        font-size: 1.2em;
+    }
+}
+
+.justify-content-md-center {
+    margin-top: 1rem;
+}

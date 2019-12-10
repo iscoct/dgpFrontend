@@ -1,21 +1,30 @@
 import React, { useState, useEffect, useRef } from 'react';
-import Header from '../../components/header';
-import { Form, Button } from 'react-bootstrap';
-import { Grid } from '@material-ui/core';
+import { Header, TextField, Button } from '../../components';
+import { Form } from 'react-bootstrap';
+import { Grid, FormControlLabel, Checkbox } from '@material-ui/core';
+import DateFnsUtils from '@date-io/date-fns';
+import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 
-function Input({ type, id, label, placeholder, value, onChange }: any): JSX.Element {
+import './userData.scss';
+
+function LikeElement({ value, setter, label }: any) {
     return (
-        <Grid xs={12} container justify='center'>
-            <Form.Group controlId={id}>
-                <Form.Label>{label}</Form.Label>
-                <Form.Control value={value} type={type}
-                	placeholder={placeholder} onChange={onChange} />
-            </Form.Group>
+        <Grid xs={6} container item justify="center">
+            <FormControlLabel
+                labelPlacement="start"
+                control={
+                    <Checkbox
+                        value={value}
+                        onChange={(event: any) => setter(event.target.value)}
+                    />
+                }
+                label={label}
+            />
         </Grid>
     );
 }
 
-export default function({ crear = true, onClickBack, id }: any): JSX.Element {
+export default function({ create = true, onClickBack, id }: any): JSX.Element {
 	const [name, setName] = useState<string>('');
 	const [firstSurname, setFirstSurname] = useState<string>('');
 	const [secondSurname, setSecondSurname] = useState<string>('');
@@ -27,7 +36,13 @@ export default function({ crear = true, onClickBack, id }: any): JSX.Element {
 	const [aspirations, setAspirations] = useState<string>('');
 	const [observations, setObservations] = useState<string>('');
 	const [rol, setRol] = useState<string>('');
-	const [dateOfBirth, setDateOfBirth] = useState<Date>(new Date());
+    const [dateOfBirth, setDateOfBirth] = useState<Date>(new Date());
+    const [firstLike, setFirstLike] = useState<boolean>(false);
+    const [secondLike, setSecondLike] = useState<boolean>(false);
+    const [thirdLike, setThirdLike] = useState<boolean>(false);
+    const [forthLike, setForthLike] = useState<boolean>(false);
+    const [fifthLike, setFifthLike] = useState<boolean>(false);
+    const [sixthLike, setSixthLike] = useState<boolean>(false);
 	const fileInput: any = useRef(null);
 	const baseUrl = 'http://localhost:8000/';
 
@@ -57,7 +72,7 @@ export default function({ crear = true, onClickBack, id }: any): JSX.Element {
 
 	function onClick() {
 		if (fileInput && fileInput.current && fileInput.current.files) {
-			const url = `${baseUrl}api/usuario${crear ? '/nuevo' : '/modificar'}`;
+			const url = `${baseUrl}api/usuario${create ? '/nuevo' : '/modificar'}`;
 			const method ='POST';
 			const formData = new FormData();
 			const file = fileInput.current.files[0];
@@ -81,7 +96,7 @@ export default function({ crear = true, onClickBack, id }: any): JSX.Element {
 				method,
 				body: formData,
 				credentials: 'include'
-			}).then((res) => res.json()).then((jsonResponse: any) => {
+			}).then((res) => res.json()).then(() => {
 				console.log(`Se ha creado el usuario correctamente`);
 				
 				onClickBack();
@@ -94,125 +109,134 @@ export default function({ crear = true, onClickBack, id }: any): JSX.Element {
             <Header
                 icon='arrow_back'
                 onIconClick={onClickBack}
-                title={crear ? 'Nuevo usuario' : 'Datos usuario'}
+                title={create ? 'Nuevo usuario' : 'Datos usuario'}
             />
             <Form>
                 <Grid justify='center' container>
-                    <Grid xs={5} container item justify='center'>
-                        <Input
-                            type='text'
-                            id='userName'
-                            label='Nombre'
-                            placeholder={'Introduzca su nombre'}
+                    <Grid className="user--form" xs={5} container item justify='center'>
+                        <TextField
                             value={name}
-                            onChange={(event: any) => setName(event.target.value)}
+                            setter={setName}
+                            label="Nombre"
                         />
-                        <Input
-                            type='text'
-                            id='primerApellido'
-                            label='Primer apellido'
-                            placeholder='Introduzca su primer apellido'
+                        <TextField
                             value={firstSurname}
-                            onChange={(event: any) => setFirstSurname(event.target.value)}
+                            label="Primer apellido"
+                            setter={setFirstSurname}
                         />
-                        <Input
-                            type='text'
-                            id='segundoApellido'
-                            label='Segundo apellido'
-                            placeholder={'Introduzca su segudo apellido'}
+                        <TextField
                             value={secondSurname}
-                            onChange={(event: any) => setSecondSurname(event.target.value)}
+                            label="Segundo apellido"
+                            setter={setSecondSurname}
                         />
-                        <Input
-                            type='text'
-                            id='dni'
-                            label='DNI'
-                            placeholder={'Introduzca su DNI'}
+                        <TextField
                             value={dni}
-                            onChange={(event: any) => setDni(event.target.value)}
+                            setter={setDni}
+                            label="DNI"
                         />
-                        <Input
-                            type='date'
-                            id='dateOfBirth'
-                            label='Fecha de nacimiento'
-                            placeholder={'dd/mm/aaaa'}
-                            value={dateOfBirth}
-                            onChange={(event: any) => setDateOfBirth(event.target.value)}
-                        />
-                        <Input
-                            type='text'
-                            id='localidad'
-                            label='localidad'
-                            placeholder={'Introduzca su localidad'}
+                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                            <KeyboardDatePicker
+                                className="date-of-birth--section"
+                                format="dd/MM/yyyy"
+                                value={dateOfBirth}
+                                onChange={(newDate: any) => setDateOfBirth(newDate)}
+                                InputAdornmentProps={{ position: "end" }}
+                            />
+                        </MuiPickersUtilsProvider>
+                        <TextField
                             value={location}
-                            onChange={(event: any) => setLocation(event.target.value)}
+                            label="Localidad"
+                            setter={setLocation}
                         />
                     </Grid>
-                    <Grid xs={5} container item justify='center'>
-                        <Input
-                            type='text'
-                            id='telefono'
-                            label='Teléfono'
-                            placeholder={'Introduzca su teléfono'}
+                    <Grid className="user--form" xs={5} container item justify='center'>
+                        <TextField
+                            label="Teléfono"
                             value={telephone}
-                            onChange={(event: any) => setTelephone(event.target.value)}
+                            setter={setTelephone}
                         />
-                        <Input
-                            type='email'
-                            id='email'
-                            label='Email'
-                            placeholder={'Introduzca su email'}
+                        <TextField
+                            type="email"
+                            label="Email"
                             value={email}
-                            onChange={(event: any) => setEmail(event.target.value)}
+                            setter={setEmail}
                         />
-                        <Input
-                            type='password'
-                            id='password'
-                            label='Password'
-                            placeholder={'Introduzca su contraseña'}
+                        <TextField
+                            type="password"
+                            label="Password"
+                            setter={setPassword}
                             value={password}
-                            onChange={(event: any) => setPassword(event.target.value)}
                         />
-                        <Input
-                            type='text'
-                            id='aspiraciones'
-                            label='Aspiraciones'
-                            placeholder={'Introduzca sus aspiraciones'}
+                        <TextField
+                            label="Aspiraciones"
                             value={aspirations}
-                            onChange={(event: any) => setAspirations(event.target.value)}
+                            setter={setAspirations}
                         />
-                        <Input
-                            type='text'
-                            id='observaciones'
-                            label='Observaciones'
-                            placeholder={'Introduzca sus observaciones'}
+                        <TextField
+                            label="Observaciones"
                             value={observations}
-                            onChange={(event: any) => setObservations(event.target.value)}
+                            setter={setObservations}
                         />
-                        <Input
-                            type='text'
-                            id='rol'
-                            label='Rol'
-                            placeholder={'Introduzca su rol'}
+                        <TextField
+                            label="Rol"
                             value={rol}
-                            onChange={(event: any) => setRol(event.target.value)}
+                            setter={setRol}
                         />
                     </Grid>
                     <Grid xs={12} container item justify='center'>
                     	<input
+                            style={{ marginTop: '2rem' }}
                     		type='file'
                     		ref={fileInput}
                     		accept="image/png"
                     	/>
                     </Grid>
-                    <Grid xs={12} container item justify='center'>
-                        <Button
-                            size='lg'
-                            variant='success'
-                            onClick={onClick}
-                        >
-                            {crear ? 'Finalizar' : 'Modificar'}
-                        </Button>
+                    <Grid xs={12} container item justify="center">
+                        <Grid className="likes--section" xs={6} container item justify="center">
+                            <Grid className="like-title--section" xs={12} container item>
+                                Gustos
+                            </Grid>
+                            <LikeElement
+                                value={firstLike}
+                                setter={setFirstLike}
+                                label="Deportes"
+                            />
+                            <LikeElement
+                                value={secondLike}
+                                setter={setSecondLike}
+                                label="Deportes"
+                            />
+                            <LikeElement
+                                value={thirdLike}
+                                setter={setThirdLike}
+                                label="Deportes"
+                            />
+                            <LikeElement
+                                value={forthLike}
+                                setter={setForthLike}
+                                label="Deportes"
+                            />
+                            <LikeElement
+                                value={fifthLike}
+                                setter={setFifthLike}
+                                label="Deportes"
+                            />
+                            <LikeElement
+                                value={sixthLike}
+                                setter={setSixthLike}
+                                label="Deportes"
+                            />
+                        </Grid>
+                    </Grid>
+                    <Grid xs={12} container item justify="center">
+                        <Grid xs={4} container item justify='center'>
+                            <Button
+                                variant='company'
+                                onClick={onClick}
+                            >
+                                {create ? 'Finalizar' : 'Modificar'}
+                            </Button>
+                        </Grid>
                     </Grid>
                 </Grid>                
             </Form>
