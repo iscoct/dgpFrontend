@@ -1,17 +1,17 @@
 import React from 'react';
 import { Avatar, Typography } from '@material-ui/core';
-import { PhotoCamera } from '@material-ui/icons';
+import { ZoomIn, ListAlt, PlaylistAddCheck, PhotoCamera } from '@material-ui/icons';
 import { Container, Row, Col } from 'react-bootstrap';
 import { Header } from '../../components';
 import Pages from '../';
 
 import './profile.scss';
 
-const NavigationElement = ({ text, onClick }: any) => {
+const NavigationElement = ({ text, onClick, icon }: any) => {
     return (
         <Col className="navigation__choose">
             <Row onClick={onClick} className="icon--section">
-                <PhotoCamera />
+                {icon || <PhotoCamera />}
             </Row>
             <Typography align="center" className="profile--typography" variant="body1">{text}</Typography>
         </Col>
@@ -33,6 +33,7 @@ const VolunteerNavigation = ({ onClick }: any) => {
                 <NavigationElement
                     onClick={() => onClick(Pages.signUpIntoActivity)}
                     text="Apuntarse"
+                    icon={<ZoomIn />}
                 />
                 <NavigationElement
                     onClick={() => onClick(Pages.createActivity)}
@@ -41,10 +42,12 @@ const VolunteerNavigation = ({ onClick }: any) => {
                 <NavigationElement
                     onClick={() => onClick(Pages.myActivities)}
                     text="Mis actividades"
+                    icon={<ListAlt />}
                 />
                 <NavigationElement
                     onClick={() => onClick(Pages.realizedActivities)}
                     text="Realizadas"
+                    icon={<PlaylistAddCheck />}
                 />
             </Row>
         </Container>
