@@ -3,6 +3,14 @@
 .profile {
 	&--container {
 		align-content: center;
+
+		&.no-admin--section {
+			max-width: 100%;
+
+			.navigation__section {
+				max-width: 100%;
+			}
+		}
 	}
 
 	&__title {

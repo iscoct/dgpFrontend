@@ -5,27 +5,19 @@ import { Grid, IconButton, Typography } from '@material-ui/core';
 
 import './chat.scss';
 
-function OwnMessage(): JSX.Element {
-    return (
-        <Grid xs={12} container item justify="flex-end">
-            <Typography className="ownMessage" variant="h6" paragraph={true} align="right">
-                My own message
-            </Typography>
-        </Grid>
-    );
-}
+function Message({ message }: any): JSX.Element {
+    const { owner, text }: any = message;
 
-function HisMessage(): JSX.Element {
     return (
-        <Grid xs={12} container item justify="flex-start">
+        <Grid xs={12} container item justify={owner === 'Mine' ? "flex-end" : "flex-start"}>
             <Typography className="hisMessage" variant="h6" paragraph={true} align="left">
-                His message
+                {text}
             </Typography>
         </Grid>
     );
 }
 
-export default function Chat({ title, onClickBack, otherUserName }: any): JSX.Element {
+export default function Chat({ title, onClickBack, otherUserName, messages }: any): JSX.Element {
     const [message, setMessage] = useState<string>('');
 
     return (
@@ -43,11 +35,9 @@ export default function Chat({ title, onClickBack, otherUserName }: any): JSX.El
             </Grid>
             <Grid xs={12} container item justify="center">
                 <Grid className="chat--section" xs={8} container item justify="center">
-                    <Grid xs={12} container item justify="center">
-                        <OwnMessage />
-                        <HisMessage />
-                        <OwnMessage />
-                    </Grid>
+                    {messages.map((mess: any, index: number) => (
+                        <Message key={index} message={mess} />
+                    ))}
                     <Grid className="write-message--section" xs={12} container item justify="center">
                         <Grid xs={7} container item justify="center">
                             <TextField

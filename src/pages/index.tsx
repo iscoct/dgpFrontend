@@ -10,7 +10,10 @@ export default {
     currentActivities: Symbol.for('CurrentActivities'),
     assessmentActivity: Symbol.for('AssessmentActivity'),
     seeActivity: Symbol.for('SeeActivity'),
-    adminSeeActivity: Symbol.for("AdminSeeActivity")
+    adminSeeActivity: Symbol.for("AdminSeeActivity"),
+    freeActivities: Symbol.for('FreeActivities'),
+    activityListSignedUp: Symbol.for('ActivityListSignedUp'),
+    chat: Symbol.for('Chat')
 };
 
 export { default as Home } from './home';
@@ -22,3 +25,4 @@ export { default as UserManagement } from './userManagement';
 export { default as ActivityList } from './activityList';
 export { default as AssessmentActivity } from './voteActivity';
 export { default as SeeActivity } from './seeActivity';
+export { default as Chat } from './chat';

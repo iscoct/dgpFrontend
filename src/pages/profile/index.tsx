@@ -3,6 +3,7 @@ import { Avatar, Typography } from '@material-ui/core';
 import { ZoomIn, ListAlt, PlaylistAddCheck, PhotoCamera } from '@material-ui/icons';
 import { Container, Row, Col } from 'react-bootstrap';
 import { Header } from '../../components';
+import classNames from 'classnames';
 import Pages from '../';
 
 import './profile.scss';
@@ -31,7 +32,7 @@ const VolunteerNavigation = ({ onClick }: any) => {
         <Container className="navigation__section">
             <Row>
                 <NavigationElement
-                    onClick={() => onClick(Pages.signUpIntoActivity)}
+                    onClick={() => onClick(Pages.freeActivities)}
                     text="Apuntarse"
                     icon={<ZoomIn />}
                 />
@@ -48,6 +49,10 @@ const VolunteerNavigation = ({ onClick }: any) => {
                     onClick={() => onClick(Pages.realizedActivities)}
                     text="Realizadas"
                     icon={<PlaylistAddCheck />}
+                />
+                <NavigationElement
+                    onClick={() => onClick(Pages.activityListSignedUp)}
+                    text="Apuntadas"
                 />
             </Row>
         </Container>
@@ -78,11 +83,12 @@ const AdministratorNavigation = ({ onClick }: any) => {
 export default function Profile({ image, name, onClick, location, age, isAdmin = false }: any): JSX.Element {
 	const avatar = image ? <Avatar src={`http://localhost:8000/images/${image}`} />
          : <Avatar>?</Avatar>;
+    const mainContainerClassName = classNames('profile--container', { 'no-admin--section': ! isAdmin });
 
     return (
         <React.Fragment>
             <Header title="Perfil" />
-            <Container className='profile--container'>
+            <Container className={mainContainerClassName}>
                 <Row className='avatar profile--row'>
                     {avatar}
                 </Row>

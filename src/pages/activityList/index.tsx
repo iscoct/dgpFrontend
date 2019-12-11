@@ -45,10 +45,10 @@ function ActivityActions(props: any): JSX.Element {
 			result = (
 				<React.Fragment>
 					<Col xs={6}>
-						<ActivityButton onClick={onClick} icon={<Visibility />}>Ver</ActivityButton>
+						<ActivityButton onClick={() => onClick('Ver')} icon={<Visibility />}>Ver</ActivityButton>
 					</Col>
 					<Col xs={6}>
-						<ActivityButton onClick={onClick} icon={<Chat />}>Chat</ActivityButton>
+						<ActivityButton onClick={() => onClick('Chat')} icon={<Chat />}>Chat</ActivityButton>
 					</Col>
 				</React.Fragment>
 			);
@@ -128,90 +128,3 @@ export default function({ activities, onClickBack, onClickActivity, page = 'free
 		</React.Fragment>
 	);
 }
-
-/* export default function({ onClickBack, onClickActivity, realizadas = false }: any): JSX.Element {
-	const [activities, setActivities] = useState<any[]>([]);
-	const typographyClasses = makeStyles({
-        h6: {
-            color: 'white'
-        }
-    })();
-    const containerClass: any = makeStyles({
-        actividad: {
-            background: 'linear-gradient(#BE6F03, #FF9301)',
-            marginTop: '5%'
-        }
-    })();
-	const url = `http://localhost:8000/api/actividades${realizadas ? `/terminadas` : ''}`;
-
-	useEffect(() => {
-		fetch(url, {
-			method: 'GET',
-			credentials: 'include'
-		}).then((response) => response.json()).then(({ actividades }: any) => {
-			setActivities(actividades);
-		}).catch(() => {
-			console.log('Hubo algún error al pedir las actividades');
-		});
-	}, []);
-	
-	function crearActividad(activity: any, onClickActivity: any) {
-		const { nombre, descripcion, imagen } = activity;
-
-		return (
-		    <Grid xs={8} classes={{ root: containerClass.actividad }} justify='center' item container>
-		        <Grid xs={8} container item>
-		            <Grid xs={12} container item>
-		                <Typography
-		                	className='bold--name'
-		                    classes={{ h6: typographyClasses.h6 }}
-		                    variant='h6'
-		                >
-		                    {nombre}
-		                </Typography>
-		            </Grid>
-		            <Grid xs={12} container item>
-		                <Typography
-		                    classes={{ h6: typographyClasses.h6 }}
-		                    variant='h6'
-		                >
-		                    {descripcion}
-		                </Typography>
-		            </Grid>
-		        </Grid>
-		        <Grid onClick={() => onClickActivity(activity)} xs={4} container item>
-		            <Grid xs={12} item>
-		            	{imagen ? <Image src={`http:localhost:8000/images/${imagen}`} fluid /> : ''}
-		            </Grid>
-		            <Grid xs={12} item>
-		                <Chip className='activity--chip' label='Ver más'/>
-		            </Grid>
-		        </Grid>
-		    </Grid>
-		);
-	}
-
-    const activitiesSections: JSX.Element = activities ? (
-        <React.Fragment>
-            {activities.map((actividad: any, index: any): JSX.Element => {
-                return (
-                    <section key={index} className='activityWrapper'>
-                        {crearActividad(actividad, onClickActivity)}
-                    </section>
-                );
-            })}
-        </React.Fragment>
-    ) : <React.Fragment></React.Fragment>;
-
-    return (
-        <React.Fragment>
-            <Header
-                icon='arrow_back'
-                onIconClick={onClickBack}
-                title='Lista de actividades'
-            />
-            {activitiesSections}
-        </React.Fragment>
-    );
-}
- */

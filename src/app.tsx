@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Pages, { Home, Profile, CreateActivity, AssessmentActivity,
+import Pages, { Home, Profile, CreateActivity, AssessmentActivity, Chat,
     UserData, UserManagement, ActivityList, SeeActivity } from './pages';
 import { login as remoteLogin } from './interactionsWithServer';
 import _ from 'lodash';
@@ -42,6 +42,12 @@ export default function App(): JSX.Element {
         const newNavigation = navigation.concat([Pages.seeActivity]);
 
         setNavigation(newNavigation);
+    }
+
+    function onClickSignedUpActivity(event: any) {
+        const nextPage: Symbol = event === 'Ver' ? Pages.seeActivity : Pages.chat;
+
+        setNavigation(navigation.concat([nextPage]));
     }
 
     switch (navigation[navigation.length - 1]) {
@@ -219,6 +225,7 @@ export default function App(): JSX.Element {
                     date={new Date()}
                     participants={["Juan Fernández Ortiz"]}
                     onClick={() => console.log("On sign up activity")}
+                    page='signUp'
                 />
             );
 
@@ -250,6 +257,91 @@ export default function App(): JSX.Element {
                     }
                 />
             );
+            break;
+        }
+        case Pages.freeActivities: {
+            currentPage = (
+                <ActivityList
+                    activities={
+                        [
+                            {
+                                titulo: 'Titulo de la actividad',
+                                localizacion: 'Calle Elvira junto Hipercor',
+                                nombre: 'Juan Fernández Del Amo',
+                                categoria: 'Deporte',
+                                fecha: new Date()
+                            },
+                            {
+                                titulo: 'Titulo de la actividad',
+                                localizacion: 'Calle Elvira junto Hipercor',
+                                nombre: 'Juan Fernández Del Amo',
+                                categoria: 'Deporte',
+                                fecha: new Date()
+                            }
+                        ]
+                    }
+                    onClickBack={onPageBack}
+                    onClickActivity={() => setNavigation(navigation.concat([Pages.signUpIntoActivity]))}
+                    page='free'
+                />
+            );
+
+            break;
+        }
+        case Pages.activityListSignedUp: {
+            currentPage = (
+                <ActivityList
+                    activities={
+                        [
+                            {
+                                titulo: 'Titulo de la actividad',
+                                localizacion: 'Calle Elvira junto Hipercor',
+                                nombre: 'Juan Fernández Del Amo',
+                                categoria: 'Deporte',
+                                fecha: new Date()
+                            },
+                            {
+                                titulo: 'Titulo de la actividad',
+                                localizacion: 'Calle Elvira junto Hipercor',
+                                nombre: 'Juan Fernández Del Amo',
+                                categoria: 'Deporte',
+                                fecha: new Date()
+                            }
+                        ]
+                    }
+                    onClickBack={onPageBack}
+                    onClickActivity={onClickSignedUpActivity}
+                    page='signUp'
+                />
+            );
+
+            break;
+        }
+        case Pages.chat: {
+            currentPage = (
+                <Chat
+                    onClickBack={onPageBack}
+                    title='Título de la actividad'
+                    otherUserName='Juan Fernández Ortiz'
+                    messages={
+                        [
+                            {
+                                text: "My own message",
+                                owner: "Mine"
+                            },
+                            {
+                                text: "His message",
+                                owner: "Yours"
+                            },
+                            {
+                                text: "My own message",
+                                owner: "Mine"
+                            }
+                        ]
+                    }
+                />
+            );
+
             break;
         }
     }
