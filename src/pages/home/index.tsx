@@ -6,7 +6,8 @@ import Mail from '@material-ui/icons/MailOutline';
 import Lock from '@material-ui/icons/Lock';
 
 import './home.scss';
-import CompanyImage from './company.png';
+
+const CompanyImage = require('./company.png');
 
 function GenericInput({ placeholder, type = "text", icon, onChange }: any): JSX.Element {
     return (
