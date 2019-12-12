@@ -1,0 +1,56 @@
+@use "../../styles/base/variables" as *;
+
+.MuiTypography-body1.activity--typography {
+    color: $company-color;
+    text-align: center;
+    font-size: 1.5rem;
+    margin-top: 0.5rem;
+
+    &:first-of-type {
+        margin-top: 4rem;
+    }
+}
+
+.MuiGrid-root {
+    &.button--section {
+        margin-top: 2.5rem;
+    }
+
+    &.vote--section {
+        border-style: solid;
+        border-width: 1px;
+        border-color: $company-color;
+        margin-top: 2.5rem;
+
+        & > .MuiGrid-root {
+            padding-left: 3rem;
+            padding-right: 3rem;
+            font-size: 1.5rem;
+            color: $company-color;
+            margin-top: 0.75rem;
+        }
+
+        .activity--rate {
+            justify-content: center;
+            align-content: center;
+        }
+
+        .comment--activity {
+            text-align: center;
+            padding-top: 3rem;
+            padding-bottom: 3rem;
+            padding-right: 6rem;
+            padding-left: 6rem;
+        }
+
+        .user-information {
+            margin-top: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: solid 1px $company-color;
+        }
+    }
+
+    &.admin--section {
+        margin-bottom: 3rem;
+    }
+}

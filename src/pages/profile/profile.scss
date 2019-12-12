@@ -1,20 +1,83 @@
-.profileContainer {
-    align-content: center;
-}
+@use '../../styles/base/variables' as *;
 
-.profileRow {
-    justify-content: center;
+.profile {
+	&--container {
+		align-content: center;
 
-	&.personalData {
-		margin-top: 6px;
-		margin-bottom: 6px;
-		
-		&:first-child {
-			margin-top: 32px;
+		&.no-admin--section {
+			max-width: 100%;
+
+			.navigation__section {
+				max-width: 100%;
+			}
 		}
 	}
-	
-    &.description {
-        margin-top: 10%;
-    }
+
+	&__title {
+		justify-content: center;
+		margin-top: 3rem;
+	}
+
+	&--typography {
+		color: $company-color;
+
+		&.MuiTypography-body1 {
+			font-size: 2rem;
+		}
+	}
+
+	&--row {
+		justify-content: center;
+
+		&.personal--data {
+			margin-top: 6px;
+			margin-bottom: 6px;
+		}
+	}
+
+	&__personal__data__section {
+		margin-top: 3rem;
+	}
+}
+
+.row.icon--section {
+	background-color: $company-color;
+	border-radius: 20%;
+	margin-right: 0.5em;
+	margin-left: 0.5em;
+	justify-content: center;
+	align-content: center;
+	height: 16rem;
+	cursor: pointer;
+}
+
+.avatar {
+	margin-top: 2rem;
+}
+
+.MuiAvatar-root.MuiAvatar-colorDefault {
+	width: 10rem;
+	height: 10rem;
+}
+
+.navigation {
+	&__choose {
+		justify-content: center;
+	}
+
+	&__section {
+		margin-top: 3rem;
+	}
+}
+
+.icon--section > .MuiSvgIcon-root {
+	width: 8em;
+	height: 8em;
+	color: white;
+}
+
+@media (min-width: 1200px) {
+	.navigation__section.container {
+		max-width: 90%;
+	}
 }

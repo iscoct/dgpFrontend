@@ -1,0 +1,26 @@
+@use "../../styles/base/variables" as *;
+
+%common-button-properties {
+    border-radius: 10px;
+    font-size: 1.6rem;
+}
+
+.MuiButton-root.company--variant {
+    background-color: $company-color;
+    @extend %common-button-properties;
+
+    &:focus, &:hover {
+        background-color: $company-marked-color;
+    }
+}
+
+.MuiButton-root.secondary--variant {
+    background-color: white;
+    color: $company-color;
+    @extend %common-button-properties;
+
+    &:focus, &:hover {
+        background-color: $company-marked-color;
+        color: white;
+    }
+}

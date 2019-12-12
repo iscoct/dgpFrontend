@@ -1,35 +1,65 @@
 import React, { useState, useRef } from 'react';
-import { Button } from '@material-ui/core';
-import { Form } from 'react-bootstrap';
+import { Button } from '../../components/';
 import { Container, Row, Col } from 'react-bootstrap';
-import Header from '../../components/header';
+import { Header, TextField, Meeting } from '../../components';
+import { FormControlLabel, Checkbox } from '@material-ui/core';
+import { AddAPhoto } from '@material-ui/icons';
+import _ from 'lodash';
 
 import './createActivity.scss';
 
-export default function({ onClickBack }: any): JSX.Element {
-	const [eventName, setEventName] = useState<string>('');
-	const [eventDescription, setEventDescription] = useState<string>('');
-	const fileInput: any = useRef(null);
-	
-	function createActivity() {
-		if (fileInput && fileInput.current && fileInput.current.files) {
-			const url = 'http://localhost:8000/api/actividades';
-			const file = fileInput.current.files[0];
-			const formData = new FormData();
-			
-			formData.append('nombre', eventName);
-			formData.append('descripcion', eventDescription);
-			formData.append('imagen', file, file.name);
+function FormattedRow({ children, colClassName = '', colWidth = 6 }: any) {
+    return (
+        <Row className="justify-content-md-center">
+            <Col className={colClassName} xs={colWidth}>
+                {children}
+            </Col>
+        </Row>
+    );
+}
 
-			fetch(url, {
-				method: 'POST',
-				body: formData,
-				credentials: 'include'
-			}).then(() => onClickBack()).catch(() =>
-				console.log('Ha habido algún error creando la actividad')
-			);
-		}
-	}
+function Label({ index }: any) {
+    const [label, setLabel] = useState<string>('');
+
+    return (
+        <Col className="label-input--section" xs={4}>
+            <TextField
+                label={`Etiqueta ${index}`}
+                value={label}
+                setter={setLabel}
+            />
+        </Col>
+    );
+}
+
+function LabelSection() {
+    const numberOfLabels = 6;
+
+    return (
+        <Container className="label--section">
+            <FormattedRow colClassName="label-title--section">
+                Etiquetas
+            </FormattedRow>
+            <Row className="justify-content-md-center">
+                {
+                    _.range(numberOfLabels).map((index: any) => {
+                        return (
+                            <Label index={index + 1} key={index} />
+                        );
+                    })
+                }
+            </Row>
+        </Container>
+    );
+}
+
+export default function({ onClickBack, onClick }: any): JSX.Element {
+	const [eventName, setEventName] = useState<string>('');
+    const [eventDescription, setEventDescription] = useState<string>('');
+    const [eventLocation, setEventLocation] = useState<string>('');
+    const [isGrupalActivity, setGrupalActivity] = useState<boolean>(false);
+    const [eventDate, setEventDate] = useState<Date>(new Date());
+    const fileInput: any = useRef(null);
 
     return (
         <React.Fragment>
@@ -39,55 +69,55 @@ export default function({ onClickBack }: any): JSX.Element {
                 onIconClick={onClickBack}
             />
             <Container>
-                <Row className="justify-content-md-center">
-                    <Col xs={6}>
-                        <Form>
-                            <Form.Group controlId="crearActividad">
-                                <Form.Label>Nombre del evento</Form.Label>
-                                <Form.Control onChange={(event: any) => setEventName(event.target.value)}
-                                	value={eventName} as="textarea" rows="3" />
-                            </Form.Group>
-                        </Form>
-                    </Col>
-                </Row>
-                <Row className="justify-content-md-center">
-                    <Col xs={6}>
-                        <Form>
-                            <Form.Group controlId="crearActividad">
-                                <Form.Label>Descripción</Form.Label>
-                                <Form.Control onChange={(event: any) => setEventDescription(event.target.value)}
-                                	value={eventDescription} as="textarea" rows="3" />
-                            </Form.Group>
-                        </Form>
-                    </Col>
-                </Row>
-                <Row className="justify-content-md-center">
-                	<Col xs={6}>
-                		<input
-                			type='file'
-                			className='create__activity--file__input'
-                			ref={fileInput}
-                			accept="image/png"
-                		/>
-                	</Col>
-                </Row>
-                <Row className="justify-content-md-center">
-                    <Col xs={6}>
-                        <Button
-                            fullWidth={true}
-                            size="large"
-                            variant="contained"
-                            color="primary"
-                            style={{
-                                background: 'linear-gradient(to bottom, #BE6F03, #eb8905)',
-                                borderRadius: '10px'
-                            }}
-                            onClick={createActivity}
-                        >
-                            Crear
-                        </Button>
-                    </Col>
-                </Row>
+                <FormattedRow>
+                    <label htmlFor="activity--image">
+                        <AddAPhoto className="add-photo--icon" />
+                    </label>
+                    <input ref={fileInput} id="activity--image" type="file" />
+                </FormattedRow>
+                <FormattedRow>
+                    <TextField
+                        label="Título de la actividad"
+                        value={eventName}
+                        setter={setEventName}
+                    />
+                </FormattedRow>
+                <FormattedRow>
+                    <TextField
+                        label="Descripción"
+                        value={eventDescription}
+                        setter={setEventDescription}
+                    />
+                </FormattedRow>
+                <FormattedRow colClassName="grupal--checkbox">
+                    <FormControlLabel
+                        labelPlacement="start"
+                        control={
+                            <Checkbox
+                                value={isGrupalActivity}
+                                onChange={(event: any) => setGrupalActivity(event.target.value)}
+                            />
+                        }
+                        label="¿Es una actividad Grupal?"
+                    />
+                </FormattedRow>
+                <FormattedRow>
+                    <LabelSection />
+                </FormattedRow>
+                <FormattedRow>
+                    <Meeting
+                        date={{ value: eventDate, setter: setEventDate }}
+                        location={{ value: eventLocation, setter: setEventLocation }}
+                    />
+                </FormattedRow>
+                <FormattedRow>
+                    <Button
+                        variant="company"
+                        onClick={onClick}
+                    >
+                        Crear
+                    </Button>
+                </FormattedRow>
             </Container>
         </React.Fragment>
     );

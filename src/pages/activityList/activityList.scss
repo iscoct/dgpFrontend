@@ -1,25 +1,44 @@
-.activityWrapper {
-    display: flex;
-    justify-content: center;
-}
+@use "../../styles/base/variables" as *;
 
-.MuiTypography-root.bold--name {
-	font-weight: bold;
-}
+.activity--section {
+	background-color: $company-color;
+	margin-top: 1rem;
 
-.MuiChip-root.activity--chip {
-	color: white;
-	background-color: #707070;
-}
+	& > .row {
+		justify-content: center;
+		color: white;
+		padding-top: 1rem;
+		font-size: 1.2rem;
 
-.activityWrapper {
-
-	&:first-of-type:first-child {
-		margin-top: 5%;
+		&.activity-title {
+			font-size: 1.75rem;
+		}
 	}
 
-	&:first-child {
-		margin-top: 2.5%;
-		margin-bottom: 2.5%;
+	.activity-information {
+		&:last-of-type {
+			margin-bottom: 2rem;
+		}
+
+		&:nth-child(2) {
+			margin-bottom: 2rem;
+		}
+
+		&--section {
+			margin-left: 2rem;
+		}
 	}
+}
+
+.row > .activity--button {
+	width: 70%;
+}
+
+.activity-button--section.row {
+	justify-content: center;
+}
+
+.activity-image--section {
+	justify-content: center;
+	margin-bottom: 2rem;
 }

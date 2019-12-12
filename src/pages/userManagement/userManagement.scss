@@ -1,3 +1,26 @@
-.MuiListItem-root.MuiListItem-gutters:first-child {
-    margin-top: 5%;
+@use "../../styles/base/variables" as *;
+
+.user-select--section > .MuiFormControl-root {
+    width: 100%;
+    margin-top: 6rem;
+
+    .MuiInputLabel-filled.Mui-focused {
+        color: $company-marked-color;
+    }
+
+    .MuiFilledInput-underline:after {
+        border-bottom: solid 1px $company-marked-color;
+    }
+
+    .MuiFilledInput-root {
+        color: $company-marked-color;
+    }
+}
+
+.user-selected--section.MuiGrid-root {
+    margin-top: 6rem;
+
+    .MuiGrid-grid-xs-2, .MuiGrid-grid-xs-3 {
+        margin-right: 1rem;
+    }
 }

@@ -1,0 +1,47 @@
+@use '../../styles/base/variables' as *;
+
+.row--home {
+    margin-top: 3em;
+    margin-bottom: 3em;
+    justify-content: center;
+}
+
+.MuiFormLabel-root.MuiInputLabel-root.Mui-focused {
+    color: $company-color;
+}
+
+.MuiInputBase-root.MuiInput-root.MuiInput-underline {
+    border-bottom: 1px solid $company-color;
+}
+
+.MuiInputBase-input.MuiInput-input {
+    font-size: 3em;
+}
+
+.MuiFormControl-root {
+    width: 80%;
+}
+
+.MuiSvgIcon-root.MuiSvgIcon-fontSizeLarge {
+    font-size: 4rem;
+}
+
+.row.row--iniciar__button, .row.row--company__icon {
+    margin-top: 6em;
+}
+
+.row {
+    .row--login__form {
+        margin-top: 4em;
+    }
+
+    .row--company__image {
+        border-radius: 30%;
+    }
+
+    &.error--section {
+        justify-content: center;
+        margin-top: 1.5rem;
+        color: $error-color;
+    }
+}
