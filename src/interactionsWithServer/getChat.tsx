@@ -37,7 +37,7 @@ fetch(url+'actividades/chat/'+id_actividad, {
     console.log('Ha habido algún error creando la actividad')
 );
 
-export default function GetActivities({ id_actividad }: any): Promise<void> {
+export default function GetChat({ id_actividad }: any): Promise<void> {
     return new Promise((resolver) => {
         resolver();
     });

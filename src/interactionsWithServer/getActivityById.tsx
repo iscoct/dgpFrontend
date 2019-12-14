@@ -9,7 +9,7 @@ fetch(url+'actividades/'+id_actividad, {
     console.log('Ha habido algún error creando la actividad')
 );
 
-export default function GetActivities({ id_actividad }: any): Promise<void> {
+export default function GetActivityById({ id_actividad }: any): Promise<void> {
     return new Promise((resolver) => {
         resolver();
     });

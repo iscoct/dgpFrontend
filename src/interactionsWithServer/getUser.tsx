@@ -32,7 +32,7 @@ fetch(url+'usuario', {
     console.log('Ha habido algún error creando la actividad')
 );
 
-export default function GetActivities(): Promise<void> {
+export default function GetUser(): Promise<void> {
     return new Promise((resolver) => {
         resolver();
     });
