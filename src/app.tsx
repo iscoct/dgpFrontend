@@ -13,9 +13,6 @@ export default function App(): JSX.Element {
     let currentPage: JSX.Element = <></>;
 
     function login({ email, password }: any): void {
-        console.log(`Email: ${email}`);
-        console.log(`Password: ${password}`);
-
         remoteLogin({ email, password }).then(() => {
             setNavigation([Pages.profile]);
             setError(false);

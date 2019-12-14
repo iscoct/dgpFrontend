@@ -2,19 +2,15 @@
 // Respuesta 200 OK
 // Respuesta 400 descrption : ... ---> si algo va mal
 
-fetch(url+'usuario', {
-    method: 'POST',
-    credentials: 'include',
-    body: JSON.stringify({email: email, password: password}),
-    headers:{
-        'Content-Type': 'application/json'
-    }
-}).then(() => onClickBack()).catch(() =>
-    console.log('Ha habido algún error creando la actividad')
-);
-
 export default function Login({ email, password }: any): Promise<void> {
-    return new Promise((resolver) => {
-        return fetch ()
-    });
+    const url = `${process.env.SERVER_URL}api/usuario`;
+
+	return fetch(url, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({ email, password }),
+		credentials: 'include'
+	}).then((res) => res.json());
 }
