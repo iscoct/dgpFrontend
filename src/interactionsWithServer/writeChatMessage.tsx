@@ -2,10 +2,10 @@
 // Respuesta 200 OK
 // Respuesta 400 descrption : ... ---> si algo va mal
 
-fetch(url+'usuario', {
+fetch(url+'actividades/chat/'+id_actividad, {
     method: 'POST',
     credentials: 'include',
-    body: JSON.stringify({email: email, password: password}),
+    body: JSON.stringify({contenido: contenido }),
     headers:{
         'Content-Type': 'application/json'
     }
@@ -13,7 +13,7 @@ fetch(url+'usuario', {
     console.log('Ha habido algún error creando la actividad')
 );
 
-export default function Login({ email, password }: any): Promise<void> {
+export default function Login({ id_actividad, contenido }: any): Promise<void> {
     return new Promise((resolver) => {
         return fetch ()
     });
