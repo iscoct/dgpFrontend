@@ -1,6 +1,7 @@
 /* eslint-disable */
 const path = require('path');
 const Fiber = require('fibers');
+const webpack = require('webpack');
 
 const htmlWebpackPlugin = require("html-webpack-plugin");
 const htmlBeatifyWebpackPlugin = require("html-beautify-webpack-plugin");
@@ -17,7 +18,10 @@ const galleryConfig = {
             template: './src/index.ejs'
         }),
         new htmlBeatifyWebpackPlugin(),
-        new DynCdnWebpackPlugin()
+        new DynCdnWebpackPlugin(),
+        new webpack.DefinePlugin({
+        	'process.env.SERVER_URL': JSON.stringify('http://localhost:8000/')
+        })
     ],
     resolve: {
         extensions: ['.js', '.tsx']
