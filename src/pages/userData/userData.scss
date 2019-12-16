@@ -7,6 +7,38 @@
 
     & > .text--input {
         margin-top: 1rem;
+
+        & > label {
+            font-size: 1.75rem;
+        }
+
+        input {
+            font-size: 1.75rem;
+        }
+    }
+}
+
+.MuiSelect-root.MuiSelect-select.MuiSelect-selectMenu.MuiSelect-outlined.MuiInputBase-input.MuiOutlinedInput-input {
+    font-size: 2rem;
+}
+
+label.MuiFormLabel-root.MuiInputLabel-root.MuiInputLabel-formControl.MuiInputLabel-animated.MuiInputLabel-shrink.MuiInputLabel-outlined.MuiFormLabel-filled {
+    display: none;
+}
+
+.MuiGrid-root.select--section {
+    margin-top: 1rem;
+
+    & > .MuiFormControl-root {
+        width: 100%;
+        
+        & > .MuiFormLabel-root {
+            font-size: 1.75rem;
+        }
+
+        .MuiSelect-root {
+            height: 2.15rem;
+        }
     }
 }
 
@@ -16,9 +48,7 @@
     border-color: $company-color;
     margin-top: 2rem;
     margin-bottom: 2rem;
-}
 
-.likes--section {
     .MuiTypography-body1 {
         font-size: 1.3rem;
     }
@@ -57,4 +87,8 @@
     font-size: 1.5rem;
     padding-left: 2rem;
     margin-bottom: 1rem;
+}
+
+.MuiGrid-root.button-user-data--section {
+    margin-bottom: 2rem;
 }

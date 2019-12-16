@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import Pages, { Home, Profile, CreateActivity, AssessmentActivity, Chat,
     UserData, UserManagement, ActivityList, SeeActivity } from './pages';
-import { login as remoteLogin, getUserOwnData } from './interactionsWithServer';
+import { login as remoteLogin, getUserOwnData, getUsers, removeUser,
+    getMyOwnActivities, createActivity, newUser, modifyUser, getSpecificUser } from './interactionsWithServer';
+import { User, RolUsuario } from './types';
 import _ from 'lodash';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -10,15 +12,20 @@ import './app.scss';
 export default function App(): JSX.Element {
     const [navigation, setNavigation] = useState<Symbol[]>([Pages.home]);
     const [error, setError] = useState<boolean>(false);
+    const [ownUser, setOwnUser] = useState<User>();
+    const [allUsers, setAllUsers] = useState<Array<User>>();
+    const [specificUser, setSpecificUser] = useState<User>();
     let currentPage: JSX.Element = <></>;
 
     function login({ email, password }: any): void {
-        remoteLogin({ email, password }).then(({ id_usuario }: any) => {
-            console.log("Por aquí pasamos");
+        remoteLogin({ email, password }).then(() => {
 
-            getUserOwnData().then((jsonResponse: any) => {
-                console.log(jsonResponse);
+            getUserOwnData().then(({ usuario }: any) => {
+                setOwnUser(usuario);
+            }).catch(() => {
+                setError(true);
             });
+
         }).then(() => {
             setNavigation([Pages.profile]);
             setError(false);
@@ -53,6 +60,80 @@ export default function App(): JSX.Element {
         setNavigation(navigation.concat([nextPage]));
     }
 
+    function onProfileClick(page: any) {
+        switch (page) {
+            case Pages.manageUsers: {
+                getUsers().then(({ usuarios }: any) => {
+                    setAllUsers(usuarios);
+                    setError(false);
+                }).catch(() => {
+                    setError(true);
+                });
+
+                break;
+            }
+            case Pages.myActivities: {
+                getMyOwnActivities().then((jsonResponse: any) => {
+                    console.log(`Json response: ${JSON.stringify(jsonResponse)}`);
+                }).catch(() => {
+                    setError(true);
+                });
+
+                break;
+            }
+        }
+
+        setNavigation(navigation.concat([page]));
+    }
+
+    function onRemoveUser(user: any) {
+        removeUser(user).then(() => {
+            onPageBack();
+            setError(false);
+        }).catch(() => {
+            setError(true);
+        });
+    }
+
+    function onCreateActivity(actividad: any) {
+        createActivity(actividad).then(() => {
+            onPageBack();
+            setError(false);
+        }).catch(() => {
+            setError(true);
+        });
+    }
+
+    function onGoingToModifyUser(user: any) {
+        getSpecificUser(user).then(({ usuario }: any) => {
+            setSpecificUser(usuario);
+            setNavigation(navigation.concat([Pages.modifyUser]));
+            setError(false);
+        }).catch(() => {
+            setError(false);
+        });
+    }
+
+    function onModifyUser(user: any) {
+        const currentPage = navigation[navigation.length];
+
+        if (currentPage === Pages.addUser) {
+            newUser(user).then((jsonResponse: any) => {
+                console.log(`Json response: ${jsonResponse}`);
+                setError(false);
+            }).catch(() => {
+                setError(true);
+            });
+        } else {
+            modifyUser(user).then((jsonResponse: any) => {
+                console.log(`Json response: ${jsonResponse}`);
+                setError(false);
+            }).catch(() => {
+                setError(true);
+            });
+        }
+    }
+
     switch (navigation[navigation.length - 1]) {
         case Pages.home: {
             currentPage = (
@@ -66,13 +147,12 @@ export default function App(): JSX.Element {
         case Pages.profile: {
             currentPage = (
                 <Profile
-                    name="Tomás Santos Ortega"
-                    location="Pulianas, Granada"
-                    age={23}
-                    isAdmin={false}
-                    onClick={
-                        (page: any) => setNavigation(navigation.concat([page]))
-                    }
+                    name={ownUser ? ownUser.nombre : ''}
+                    location={ownUser ? ownUser.localidad : ''}
+                    age={ownUser ? ownUser.fecha_nacimiento : ''}
+                    isAdmin={ownUser && ownUser.rol === RolUsuario[RolUsuario.administrador]}
+                    image={ownUser ? ownUser.imagen : ''}
+                    onClick={onProfileClick}
                 />
             );
             break;
@@ -81,7 +161,7 @@ export default function App(): JSX.Element {
             currentPage = (
                 <CreateActivity
                     onClickBack={onPageBack}
-                    onClick={() => console.log("Create activity was clicked")}
+                    onClick={onCreateActivity}
                 />
             );
             break;
@@ -91,6 +171,18 @@ export default function App(): JSX.Element {
                 <UserData
                     create={true}
                     onClickBack={onPageBack}
+                    onClick={onModifyUser}
+                />
+            );
+            break;
+        }
+        case Pages.modifyUser: {
+            currentPage = (
+                <UserData
+                    create={false}
+                    onClickBack={onPageBack}
+                    onClick={onModifyUser}
+                    user={specificUser}
                 />
             );
             break;
@@ -99,14 +191,10 @@ export default function App(): JSX.Element {
             currentPage = (
                 <UserManagement
                     onClickBack={onPageBack}
-                    onModifyUser={(user: any) => console.log(`Se ha clickado para modificar a ${user}`)}
-                    onRemoveUser={(user: any) => console.log(`Se ha clickado para eliminar a ${user}`)}
+                    onModifyUser={onGoingToModifyUser}
+                    onRemoveUser={onRemoveUser}
                     onSeeActivities={(user: any) => console.log(`Se ha clickado para ver las actividades de ${user}`)}
-                    users={[
-                        "Usuario 1",
-                        "Usuario 2",
-                        "Usuario 3"
-                    ]}
+                    users={allUsers}
                 />
             );
             break;

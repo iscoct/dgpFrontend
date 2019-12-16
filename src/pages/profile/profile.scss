@@ -36,7 +36,7 @@
 	}
 
 	&__personal__data__section {
-		margin-top: 3rem;
+		margin-top: 1rem;
 	}
 }
 
@@ -53,6 +53,11 @@
 
 .avatar {
 	margin-top: 2rem;
+
+	.profile--image {
+		min-width: 12rem;
+		min-height: 12rem;
+	}
 }
 
 .MuiAvatar-root.MuiAvatar-colorDefault {

@@ -85,7 +85,7 @@ function Activity({ data, onClick, page }: any): JSX.Element {
 				<Col>
 					<Row className="activity-image--section">
 						{imagen ?
-							<Image src={`http://localhost:8000/images/${imagen}`} fluid />
+							<Image src={`${process.env.SERVER_URL}images/${imagen}`} fluid />
 							: 'No image was found'}
 					</Row>
 					<Row className="activity-button--section">

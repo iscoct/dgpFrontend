@@ -7,7 +7,7 @@ import Lock from '@material-ui/icons/Lock';
 
 import './home.scss';
 
-const CompanyImage = require('./company.png');
+import CompanyImage from './companyImage.json';
 
 function GenericInput({ placeholder, type = "text", icon, onChange }: any): JSX.Element {
     return (
@@ -67,7 +67,7 @@ export default function({ onClickIniciar, error }: any): JSX.Element {
             <Container>
                 <Row className="row--home row--company__icon">
                     <img
-                        src={CompanyImage}
+                        src={`data:image/png;base64,${CompanyImage["companyImage"]}`}
                         alt="Company Image"
                         className="row--company__image"
                     />

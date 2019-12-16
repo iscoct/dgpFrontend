@@ -4,3 +4,6 @@ export { default as getUsers } from './getUsers';
 export { default as modifyUser } from './modifyUser';
 export { default as removeUser } from './removeUser';
 export { default as getUserOwnData } from './getUserOwnData';
+export { default as getSpecificUser } from './getSpecificUser';
+export { default as getMyOwnActivities } from './getMyOwnActivities';
+export { default as newUser } from './newUser';

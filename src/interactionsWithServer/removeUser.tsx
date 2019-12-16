@@ -1,18 +1,11 @@
-/* const url = 'http://localhost:8000/';
+export default function removeUser(user: any): Promise<void> {
+	const url = `${process.env.SERVER_URL}api/usuario/${user.id}`;
 
-	function onRemoveUser(user: any) {
-		fetch(`${url}api/usuario/${user.id}`, {
-			method: 'DELETE',
-			credentials: 'include',
-			headers: {
-				'Content-Type': 'application/json'
-			}
-		}).then((res) => res.json()).then((jsonResponse) => {
-			console.log(`Response: ${JSON.stringify(jsonResponse)}`);
-		});
-    } */
-export default function RemoveUser({ user }: any): Promise<void> {
-    return new Promise((resolver) => {
-        resolver();
-    });
+	return fetch(url, {
+		method: 'DELETE',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		credentials: 'include'
+	}).then((res) => res.json());
 }

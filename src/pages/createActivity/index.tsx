@@ -1,9 +1,8 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '../../components/';
 import { Container, Row, Col } from 'react-bootstrap';
-import { Header, TextField, Meeting } from '../../components';
+import { Header, TextField, Meeting, FileInput } from '../../components';
 import { FormControlLabel, Checkbox } from '@material-ui/core';
-import { AddAPhoto } from '@material-ui/icons';
 import _ from 'lodash';
 
 import './createActivity.scss';
@@ -18,9 +17,7 @@ function FormattedRow({ children, colClassName = '', colWidth = 6 }: any) {
     );
 }
 
-function Label({ index }: any) {
-    const [label, setLabel] = useState<string>('');
-
+function Label({ index, label, setLabel }: any) {
     return (
         <Col className="label-input--section" xs={4}>
             <TextField
@@ -32,8 +29,20 @@ function Label({ index }: any) {
     );
 }
 
-function LabelSection() {
+function LabelSection({ labels, setLabels }: any) {
     const numberOfLabels = 6;
+
+    useEffect(() => {
+        setLabels(Array(numberOfLabels).fill(''));
+    }, []);
+
+    function onSetLabels(index: number, newValue: any) {
+        const newLabels = Array.from(labels);
+
+        newLabels[index] = newValue;
+
+        setLabels(newLabels);
+    }
 
     return (
         <Container className="label--section">
@@ -42,11 +51,16 @@ function LabelSection() {
             </FormattedRow>
             <Row className="justify-content-md-center">
                 {
-                    _.range(numberOfLabels).map((index: any) => {
+                    labels ? _.range(numberOfLabels).map((index: any) => {
                         return (
-                            <Label index={index + 1} key={index} />
+                            <Label
+                                index={index + 1}
+                                key={index}
+                                labels={labels[index]}
+                                setLabel={(newValue: any) => onSetLabels(index, newValue)}
+                            />
                         );
-                    })
+                    }) : ''
                 }
             </Row>
         </Container>
@@ -59,6 +73,7 @@ export default function({ onClickBack, onClick }: any): JSX.Element {
     const [eventLocation, setEventLocation] = useState<string>('');
     const [isGrupalActivity, setGrupalActivity] = useState<boolean>(false);
     const [eventDate, setEventDate] = useState<Date>(new Date());
+    const [labels, setLabels] = useState<Array<string>>();
     const fileInput: any = useRef(null);
 
     return (
@@ -69,12 +84,10 @@ export default function({ onClickBack, onClick }: any): JSX.Element {
                 onIconClick={onClickBack}
             />
             <Container>
-                <FormattedRow>
-                    <label htmlFor="activity--image">
-                        <AddAPhoto className="add-photo--icon" />
-                    </label>
-                    <input ref={fileInput} id="activity--image" type="file" />
-                </FormattedRow>
+                <FileInput
+                    id="actividad-input-image"
+                    fileInput={fileInput}
+                />
                 <FormattedRow>
                     <TextField
                         label="Título de la actividad"
@@ -102,7 +115,7 @@ export default function({ onClickBack, onClick }: any): JSX.Element {
                     />
                 </FormattedRow>
                 <FormattedRow>
-                    <LabelSection />
+                    <LabelSection labels={labels} setLabels={setLabels} />
                 </FormattedRow>
                 <FormattedRow>
                     <Meeting
@@ -113,7 +126,17 @@ export default function({ onClickBack, onClick }: any): JSX.Element {
                 <FormattedRow>
                     <Button
                         variant="company"
-                        onClick={onClick}
+                        onClick={() => {
+                            onClick({
+                                nombre: eventName,
+                                descripcion: eventDescription,
+                                tipo: isGrupalActivity ? 'grupal' : 'pareja',
+                                localizacion: eventLocation,
+                                fecha: eventDate,
+                                imagen: fileInput,
+                                etiquetas: labels
+                            });
+                        }}
                     >
                         Crear
                     </Button>

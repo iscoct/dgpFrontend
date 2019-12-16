@@ -1,27 +1,11 @@
 @use "../../styles/base/variables" as *;
 
-.MuiSvgIcon-root.add-photo--icon {
-    width: 40%;
-    height: 7rem;
-    background-color: $company-color;
-    border-radius: 20px;
-    padding-top: 16px;
-    padding-bottom: 16px;
-    color: white;
-    margin-top: 0.5rem;
-    cursor: pointer;
-}
-
 .justify-content-md-center > .col-6 {
     text-align: center;
 }
 
 .MuiButtonBase-root.MuiCheckbox-colorSecondary.Mui-checked {
     color: $company-marked-color;
-}
-
-#activity--image {
-    display: none;
 }
 
 .col-6.grupal--checkbox {

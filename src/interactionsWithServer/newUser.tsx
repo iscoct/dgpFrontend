@@ -1,5 +1,5 @@
-export default function modifyUser(user: any): Promise<void> {
-    const url = `${process.env.SERVER_URL}api/usuario/modificar`;
+export default function newUser(user: any): Promise<void> {
+    const url = `${process.env.SERVER_URL}api/usuario/nuevo`;
 
     return fetch(url, {
         method: 'POST',

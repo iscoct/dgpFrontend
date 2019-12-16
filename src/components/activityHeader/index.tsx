@@ -14,7 +14,7 @@ export default function({ title, image, alt, description }: any) {
                 </Typography>
             </Grid>
             <Grid className="comment--section" container justify="center">
-                <Image alt={alt} src={`http://localhost:8000/images/${image}`} />
+                <Image alt={alt} src={`${process.env.SERVER_URL}images/${image}`} />
                 <Group className="group--icon" />
             </Grid>
             <Grid xs={8} justify="center" container>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Header, Button } from '../../components';
+import { User } from '../../types';
 import { FormControl, InputLabel, Select, MenuItem, Grid } from '@material-ui/core';
 
 import './userManagement.scss';
@@ -13,10 +14,10 @@ function SelectSection({ selectedUser, setter, users }: any): JSX.Element {
                     <Select
                         labelId="user--select"
                         value={selectedUser}
-                        onChange={(event: React.ChangeEvent<{ value: unknown }>): void => setter(event.target.value as string)}
+                        onChange={(event: React.ChangeEvent<{ value: unknown }>): void => setter(users[event.target.value as number])}
                     >
-                        {users.map((user: any, index: number) =>
-                            <MenuItem key={index} value={user}>{user}</MenuItem>
+                        {users && users.map((user: User, index: number) =>
+                            <MenuItem key={index} value={index}>{user.nombre}</MenuItem>
                         )}
                     </Select>
                 </FormControl>
@@ -30,7 +31,7 @@ function SelectedUserSection({ user, onModifyUser, onRemoveUser, onSeeActivities
         <Grid className="user-selected--section" xs={12} container item justify="center">
             <Grid xs={10} container item justify="center">
                 <Grid xs={2} container item alignItems="center" justify="center">
-                    {user}
+                    {user.nombre}
                 </Grid>
                 <Grid xs={3} container item justify="center">
                     <Button
@@ -62,7 +63,7 @@ function SelectedUserSection({ user, onModifyUser, onRemoveUser, onSeeActivities
 }
 
 export default function UserManagement({ users, onClickBack, onModifyUser, onRemoveUser, onSeeActivities }: any): JSX.Element {
-    const [user, setUser] = useState<string>('');
+    const [user, setUser] = useState<User>();
 
     return (
         <React.Fragment>
@@ -85,106 +86,3 @@ export default function UserManagement({ users, onClickBack, onModifyUser, onRem
         </React.Fragment>
     );
 }
-
-/* 
-export default function({ onClickBack, onModifyUser }: any): JSX.Element {
-    const dividerClass = makeStyles({
-        light: {
-            backgroundColor: 'white'
-        }
-    })();
-    const chipClasses = makeStyles({
-        primary: {
-            backgroundColor: 'green',
-            width: '75%'
-        },
-        secondary: {
-            backgroundColor: 'red',
-            width: '75%'
-        }
-    })();
-    const typographyClass = makeStyles({
-        initial: {
-            color: 'white'
-        }
-    })();
-    const [users, setUsers] = useState<any[]>([]);
-	const url = 'http://localhost:8000/';
-
-	function onRemoveUser(user: any) {
-		fetch(`${url}api/usuario/${user.id}`, {
-			method: 'DELETE',
-			credentials: 'include',
-			headers: {
-				'Content-Type': 'application/json'
-			}
-		}).then((res) => res.json()).then((jsonResponse) => {
-			console.log(`Response: ${JSON.stringify(jsonResponse)}`);
-		});
-	}
-
-	useEffect(() => {
-		fetch(`${url}api/usuarios`, {
-			method: 'GET',
-			credentials: 'include'
-		}).then((response) => response.json()).then(({ usuarios }) => {
-			if (JSON.stringify(usuarios) !== JSON.stringify(users)) {
-				setUsers(usuarios);
-			}
-		});
-	}, [users]);
-
-    return (
-        <React.Fragment>
-            <Header
-                icon='arrow_back'
-                onIconClick={onClickBack}
-                title='Gestión de Usuarios'
-            />
-            {users ?
-                <List>
-                    {users.map((user: any, index: number) => {
-                        return (
-                            <React.Fragment key={index}>
-                                <ListItem>
-                                    <Grid justify='center' container>
-                                        <Grid xs={4} container justify='center' item>
-                                            <Typography
-                                                classes={{
-                                                    root: typographyClass.initial
-                                                }}
-                                            >
-                                                {user.nombre}
-                                            </Typography>
-                                        </Grid>
-                                        <Grid xs={4} container justify='center' item>
-                                            <Chip
-                                                classes={{
-                                                    root: chipClasses.primary
-                                                }}
-                                                label='Modificar Datos'
-                                                color='primary'
-                                                onClick={() => onModifyUser(user)}
-                                            />
-                                        </Grid>
-                                        <Grid xs={4} container justify='center' item>
-                                            <Chip
-                                                classes={{
-                                                    root: chipClasses.secondary
-                                                }}
-                                                label='Eliminar'
-                                                color='secondary'
-                                                onClick={() => onRemoveUser(user)}
-                                            />
-                                        </Grid>
-                                    </Grid>
-                                </ListItem>
-                                <Divider light classes={{ light: dividerClass.light }} />
-                            </React.Fragment>
-                        );
-                    })}
-                </List> : ''
-            }
-        </React.Fragment>
-    );
-} */

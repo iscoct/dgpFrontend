@@ -13,7 +13,8 @@ export default {
     adminSeeActivity: Symbol.for("AdminSeeActivity"),
     freeActivities: Symbol.for('FreeActivities'),
     activityListSignedUp: Symbol.for('ActivityListSignedUp'),
-    chat: Symbol.for('Chat')
+    chat: Symbol.for('Chat'),
+    modifyUser: Symbol.for('ModityUser')
 };
 
 export { default as Home } from './home';
