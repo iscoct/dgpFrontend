@@ -1,0 +1,30 @@
+@use "../../styles/base/variables" as *;
+
+.MuiSvgIcon-root.add-photo--icon {
+    width: 40%;
+    height: 7rem;
+    background-color: $company-color;
+    border-radius: 20px;
+    padding-top: 16px;
+    padding-bottom: 16px;
+    color: white;
+    margin-top: 0.5rem;
+    cursor: pointer;
+}
+
+.add-photo--input {
+    display: none;
+}
+
+.row.add-photo--section {
+    justify-content: center;
+    margin-top: 1rem;
+
+    & > .add-photo--label {
+        text-align: center;
+    }
+}
+
+.row.filesname--section {
+    justify-content: center;
+}
