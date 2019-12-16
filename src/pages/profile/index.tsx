@@ -81,7 +81,7 @@ const AdministratorNavigation = ({ onClick }: any) => {
 }
 
 export default function Profile({ image, name, onClick, location, age, isAdmin = false }: any): JSX.Element {
-	const avatar = image ? <Avatar src={`http://localhost:8000/images/${image}`} />
+	const avatar = image ? <Avatar className="profile--image" src={`${process.env.SERVER_URL}images/${image}`} />
          : <Avatar>?</Avatar>;
     const mainContainerClassName = classNames('profile--container', { 'no-admin--section': ! isAdmin });
 

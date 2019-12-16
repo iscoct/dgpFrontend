@@ -20,11 +20,11 @@ const galleryConfig = {
         new htmlBeatifyWebpackPlugin(),
         new DynCdnWebpackPlugin(),
         new webpack.DefinePlugin({
-        	'process.env.SERVER_URL': JSON.stringify('http://168.63.10.206/')
+        	'process.env.SERVER_URL': JSON.stringify('http://104.40.182.227/')
         })
     ],
     resolve: {
-        extensions: ['.js', '.tsx']
+        extensions: ['.js', '.tsx', '.json']
     },
     devServer: {
     	headers: {
@@ -62,14 +62,15 @@ const galleryConfig = {
                 ]
             },
             {
-                test: /\.(svg|jpe?g|png)(\?v=\d+\.\d+\.\d+)?$/,
-                use: [{
-                    loader: 'file-loader',
-                    options: {
-                        name: '[name].[ext]',
-                        outputPath: './style/images'
-                    }
-                }]
+                test: /\.(jpg|png|svg)$/,
+                loader: 'url-loader'
+            },
+            {
+                test: /\.(jpg|png|svg)$/,
+                loader: 'file-loader',
+                options: {
+                  name: '[path][name].[hash].[ext]',
+                },
             }
         ]
     }
