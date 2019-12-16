@@ -3,3 +3,4 @@ export { default as createActivity } from './createActivity';
 export { default as getUsers } from './getUsers';
 export { default as modifyUser } from './modifyUser';
 export { default as removeUser } from './removeUser';
+export { default as getUserOwnData } from './getUserOwnData';

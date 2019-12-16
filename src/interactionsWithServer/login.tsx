@@ -1,5 +1,5 @@
-export default function Login({ email, password }: any): Promise<void> {
-    const url = `${process.env.SERVER_URL}api/usuario`;
+export default function login({ email, password }: any): Promise<void> {
+    const url = `${process.env.SERVER_URL}api/login`;
 
 	return fetch(url, {
 		method: 'POST',

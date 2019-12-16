@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Pages, { Home, Profile, CreateActivity, AssessmentActivity, Chat,
     UserData, UserManagement, ActivityList, SeeActivity } from './pages';
-import { login as remoteLogin } from './interactionsWithServer';
+import { login as remoteLogin, getUserOwnData } from './interactionsWithServer';
 import _ from 'lodash';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -13,7 +13,13 @@ export default function App(): JSX.Element {
     let currentPage: JSX.Element = <></>;
 
     function login({ email, password }: any): void {
-        remoteLogin({ email, password }).then(() => {
+        remoteLogin({ email, password }).then(({ id_usuario }: any) => {
+            console.log("Por aquí pasamos");
+
+            getUserOwnData().then((jsonResponse: any) => {
+                console.log(jsonResponse);
+            });
+        }).then(() => {
             setNavigation([Pages.profile]);
             setError(false);
         }).catch(() => {

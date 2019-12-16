@@ -20,7 +20,7 @@ const galleryConfig = {
         new htmlBeatifyWebpackPlugin(),
         new DynCdnWebpackPlugin(),
         new webpack.DefinePlugin({
-        	'process.env.SERVER_URL': JSON.stringify('http://localhost:8000/')
+        	'process.env.SERVER_URL': JSON.stringify('http://168.63.10.206/')
         })
     ],
     resolve: {
