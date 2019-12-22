@@ -1,3 +1,5 @@
+import { Md5 } from 'ts-md5/dist/md5';
+
 export default function newUser({ nombre, apellido1, apellido2, DNI, fecha_nacimiento,
         localidad, email, telefono, aspiraciones, observaciones, password, rol, id, imagen, gustos }: any): Promise<void> {
     const url = `${process.env.SERVER_URL}api/usuario/nuevo`;
@@ -14,7 +16,7 @@ export default function newUser({ nombre, apellido1, apellido2, DNI, fecha_nacim
     formData.append('telefono', telefono);
     formData.append('aspiraciones', aspiraciones);
     formData.append('observaciones', observaciones);
-    formData.append('password', password);
+    formData.append('password', Md5.hashStr(password).toString());
     formData.append('rol', rol);
     formData.append('id', id);
     formData.append('gustos', gustos);
