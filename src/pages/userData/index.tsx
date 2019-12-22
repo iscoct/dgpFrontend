@@ -1,24 +1,21 @@
 import React, { useState, useRef } from 'react';
 import { Header, TextField, Button, FileInput } from '../../components';
 import { Form } from 'react-bootstrap';
-import { Grid, FormControlLabel, Checkbox, Select, InputLabel, FormControl } from '@material-ui/core';
+import { Grid, Select, InputLabel, FormControl } from '@material-ui/core';
 import DateFnsUtils from '@date-io/date-fns';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import { Cine, Compras, Deporte, Excursion, Juegos, Mas } from './img';
 
 import './userData.scss';
 
-function LikeElement({ value, setter, label }: any) {
+function LikeElement({ src, alt, onClick }: any) {
     return (
-        <Grid xs={6} container item justify="center">
-            <FormControlLabel
-                labelPlacement="start"
-                control={
-                    <Checkbox
-                        value={value}
-                        onChange={(event: any) => setter(event.target.value)}
-                    />
-                }
-                label={label}
+        <Grid xs={6} className="likes-images--container" container item justify="center">
+            <img
+                src={`data:image/png;base64,${src}`}
+                alt={alt}
+                className="likes--images"
+                onClick={onClick}
             />
         </Grid>
     );
@@ -27,7 +24,7 @@ function LikeElement({ value, setter, label }: any) {
 export default function({ create = true, onClickBack, onClick, user = {} }: any): JSX.Element {
     const { nombre, apellido1, apellido2, rol: defaultRol, DNI, fecha_nacimiento,
         localidad, email: defaultEmail, password: defaultPassword, telefono,
-        aspiraciones, observaciones } = user;
+        aspiraciones, observaciones, id } = user;
 	const [name, setName] = useState<string>(nombre || '');
 	const [firstSurname, setFirstSurname] = useState<string>(apellido1 || '');
 	const [secondSurname, setSecondSurname] = useState<string>(apellido2 || '');
@@ -40,13 +37,43 @@ export default function({ create = true, onClickBack, onClick, user = {} }: any)
 	const [observations, setObservations] = useState<string>(observaciones || '');
 	const [rol, setRol] = useState<string>(defaultRol || '');
     const [dateOfBirth, setDateOfBirth] = useState<Date>(fecha_nacimiento || new Date());
-    const [firstLike, setFirstLike] = useState<boolean>(false);
-    const [secondLike, setSecondLike] = useState<boolean>(false);
-    const [thirdLike, setThirdLike] = useState<boolean>(false);
-    const [forthLike, setForthLike] = useState<boolean>(false);
-    const [fifthLike, setFifthLike] = useState<boolean>(false);
-    const [sixthLike, setSixthLike] = useState<boolean>(false);
+    const [likeCinema, setLikeCinema] = useState<boolean>(false);
+    const [likeShooping, setLikeShooping] = useState<boolean>(false);
+    const [likeSports, setLikeSports] = useState<boolean>(false);
+    const [likeExcursion, setLikeExcursion] = useState<boolean>(false);
+    const [likePlay, setLikePlay] = useState<boolean>(false);
+    const [likeOther, setLikeOther] = useState<boolean>(false);
 	const fileInput: any = useRef(null);
+
+    function formatLikes() {
+        const likes = [];
+
+        if (likeCinema) {
+            likes.push("Cine");
+        }
+
+        if (likeShooping) {
+            likes.push("Compras");
+        }
+
+        if (likeSports) {
+            likes.push("Deportes");
+        }
+
+        if (likeExcursion) {
+            likes.push("Ocio");
+        }
+
+        if (likePlay) {
+            likes.push("Juegos de Mesa");
+        }
+
+        if(likeOther) {
+            likes.push("Otro");
+        }
+
+        return likes;
+    }
 
     return (
         <React.Fragment>
@@ -123,7 +150,7 @@ export default function({ create = true, onClickBack, onClick, user = {} }: any)
                         />
                         <Grid xs={12} className="select--section" container item justify="center">
                             <FormControl variant="outlined">
-                                <InputLabel htmlFor='rol-user--select'>Rol</InputLabel>
+                                <InputLabel className="select--label" htmlFor='rol-user--select'>Rol</InputLabel>
                                 <Select
                                     value={rol}
                                     onChange={(event: any) => setRol(event.target.value)}
@@ -150,34 +177,34 @@ export default function({ create = true, onClickBack, onClick, user = {} }: any)
                                 Gustos
                             </Grid>
                             <LikeElement
-                                value={firstLike}
-                                setter={setFirstLike}
-                                label="Deportes"
+                                src={Cine[likeCinema ? "primary" : "secondary"]}
+                                alt={`Cinema Symbol ${likeCinema ? "Selected" : "Deselected"}`}
+                                onClick={() => setLikeCinema(! likeCinema)}
                             />
                             <LikeElement
-                                value={secondLike}
-                                setter={setSecondLike}
-                                label="Deportes"
+                                src={Compras[likeShooping ? "primary" : "secondary"]}
+                                alt={`Compras Symbol ${likeShooping ? "Selected" : "Deselected"}`}
+                                onClick={() => setLikeShooping(! likeShooping)}
                             />
                             <LikeElement
-                                value={thirdLike}
-                                setter={setThirdLike}
-                                label="Deportes"
+                                src={Deporte[likeSports ? "primary" : "secondary"]}
+                                alt={`Sports Symbol ${likeSports ? "Selected" : "Deselected"}`}
+                                onClick={() => setLikeSports(! likeSports)}
                             />
                             <LikeElement
-                                value={forthLike}
-                                setter={setForthLike}
-                                label="Deportes"
+                                src={Excursion[likeExcursion ? "primary" : "secondary"]}
+                                alt={`Excursion Symbol ${likeExcursion ? "Selected" : "Deselected"}`}
+                                onClick={() => setLikeExcursion(! likeExcursion)}
                             />
                             <LikeElement
-                                value={fifthLike}
-                                setter={setFifthLike}
-                                label="Deportes"
+                                src={Juegos[likePlay ? "primary" : "secondary"]}
+                                alt={`Games Symbol ${likePlay ? "Selected" : "Deselected"}`}
+                                onClick={() => setLikePlay(! likePlay)}
                             />
                             <LikeElement
-                                value={sixthLike}
-                                setter={setSixthLike}
-                                label="Deportes"
+                                src={Mas[likeOther ? "primary" : "secondary"]}
+                                alt={`Others Symbol ${likeOther ? "Selected" : "Deselected"}`}
+                                onClick={() => setLikeOther(! likeOther)}
                             />
                         </Grid>
                     </Grid>
@@ -197,7 +224,10 @@ export default function({ create = true, onClickBack, onClick, user = {} }: any)
                                     aspiraciones: aspirations,
                                     observaciones: observations,
                                     password,
-                                    imagen: fileInput.current.file[0]
+                                    rol,
+                                    id,
+                                    imagen: fileInput,
+                                    gustos: formatLikes()
                                 })}
                             >
                                 {create ? 'Finalizar' : 'Modificar'}

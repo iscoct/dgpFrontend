@@ -15,7 +15,18 @@ const Information = ({ section, text }: any) => {
     );
 };
 
-export default function({ title, description, onClickBack, onClickVote, volunteerName }: any): JSX.Element {
+function getParticipantNames(participants: any): string {
+    let participantNames = '';
+
+    participants && participants.forEach((participant: any) => {
+        participantNames += ` ${participant.nombre} `;
+    });
+
+    return participantNames;
+}
+
+export default function({ onClickBack, onClickVote, activity }: any): JSX.Element {
+    const { nombre, descripcion, participantes } = activity || {};
     const [rating, setRating] = useState<number>(5);
 
     return (
@@ -25,13 +36,13 @@ export default function({ title, description, onClickBack, onClickVote, voluntee
                 icon='arrow_back'
                 onIconClick={onClickBack}
             />
-            <Grid container justify='center'>
+            <Grid item container justify='center'>
                 <ActivityHeader
-                    title={title}
-                    description={description}
+                    title={nombre}
+                    description={descripcion}
                     alt="La actividad no tiene imagen asociada"
                 />
-                <Information section="h5" text={`Voluntario: ${volunteerName}`} />
+                <Information section="h5" text={`Participantes: ${getParticipantNames(participantes)}`} />
                 <Grid className="rating--section" justify='center' container item>
                     <Grid xs={12} justify='center' container item>
                         <Rating
@@ -41,7 +52,7 @@ export default function({ title, description, onClickBack, onClickVote, voluntee
                         />
                     </Grid>
                     <Grid xs={4} justify='center' container item>
-                        <Button variant="company" onClick={() => onClickVote(rating)}>
+                        <Button variant="company" onClick={() => onClickVote({ rating, activity })}>
                             Valorar
                         </Button>
                     </Grid>

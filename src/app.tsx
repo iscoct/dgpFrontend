@@ -1,20 +1,32 @@
+/* eslint-disable max-len */
+/* eslint-disable no-extra-parens */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+/* eslint-disable max-statements */
+/* eslint-disable complexity */
+/* eslint-disable max-lines-per-function */
 import React, { useState } from 'react';
 import Pages, { Home, Profile, CreateActivity, AssessmentActivity, Chat,
     UserData, UserManagement, ActivityList, SeeActivity } from './pages';
 import { login as remoteLogin, getUserOwnData, getUsers, removeUser,
-    getMyOwnActivities, createActivity, newUser, modifyUser, getSpecificUser } from './interactionsWithServer';
+    getMyOwnActivities, createActivity, newUser, modifyUser,
+    getSpecificUser, getActivities, getFinishedActivities,
+    getActivity, signUpIntoActivity, closeActivity, voteActivity,
+    getActivitiesFromSpecificUser } from './interactionsWithServer';
 import { User, RolUsuario } from './types';
 import _ from 'lodash';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './app.scss';
+import { Activity } from './types';
 
 export default function App(): JSX.Element {
-    const [navigation, setNavigation] = useState<Symbol[]>([Pages.home]);
+    const [navigation, setNavigation] = useState<symbol[]>([Pages.home]);
     const [error, setError] = useState<boolean>(false);
     const [ownUser, setOwnUser] = useState<User>();
-    const [allUsers, setAllUsers] = useState<Array<User>>();
+    const [allUsers, setAllUsers] = useState<User[]>();
     const [specificUser, setSpecificUser] = useState<User>();
+    const [activities, setActivities] = useState<Activity[]>();
+    const [specificActivity, setSpecificActivity] = useState<Activity>();
     let currentPage: JSX.Element = <></>;
 
     function login({ email, password }: any): void {
@@ -38,26 +50,36 @@ export default function App(): JSX.Element {
         setNavigation(_.dropRight(navigation));
     }
 
-    function onAssessmentActivity() {
-        console.log('An activity was clicked');
-
-        const newNavigation = navigation.concat([Pages.assessmentActivity]);
-
-        setNavigation(newNavigation);
-    }
-
-    function onSeeActivity() {
-        console.log("An activity was clicked");
-
-        const newNavigation = navigation.concat([Pages.seeActivity]);
-
-        setNavigation(newNavigation);
-    }
-
-    function onClickSignedUpActivity(event: any) {
-        const nextPage: Symbol = event === 'Ver' ? Pages.seeActivity : Pages.chat;
+    function onGetSpecificActivity({ id_actividad, nextPage }: any) {
+        getActivity(id_actividad).then(({ actividad }: any) => {
+            setSpecificActivity(actividad);
+            setError(false);
+        }).catch(() => {
+            setError(false);
+        });
 
         setNavigation(navigation.concat([nextPage]));
+    }
+
+    function onSignUpIntoActivity({ id_actividad }: any) {
+        signUpIntoActivity(id_actividad).then(({ descripcion }: any) => {
+            console.log(`Descripción a la vuelta de Sign Up: ${descripcion}`);
+
+            onPageBack();
+            setError(false);
+        }).catch(() => {
+            setError(true);
+        });
+    }
+
+    function onSeeActivitiesFromUser({ id }: any) {
+        getActivitiesFromSpecificUser(id).then(({ actividades }: any) => {
+            setActivities(actividades);
+            setNavigation(navigation.concat([Pages.currentActivities]));
+            setError(false);
+        }).catch(() => {
+            setError(true);
+        });
     }
 
     function onProfileClick(page: any) {
@@ -73,12 +95,33 @@ export default function App(): JSX.Element {
                 break;
             }
             case Pages.myActivities: {
-                getMyOwnActivities().then((jsonResponse: any) => {
-                    console.log(`Json response: ${JSON.stringify(jsonResponse)}`);
+                getMyOwnActivities().then(({ actividades }: any) => {
+                    setActivities(actividades);
+                    setError(false);
                 }).catch(() => {
                     setError(true);
                 });
 
+                break;
+            }
+            case Pages.freeActivities:
+            case Pages.currentActivities: {
+                getActivities().then(({ actividades }: any) => {
+                    setActivities(actividades);
+                    setError(false);
+                }).catch(() => {
+                    setError(true);
+                });
+
+                break;
+            }
+            case Pages.realizedActivities: {
+                getFinishedActivities().then(({ actividades }: any) => {
+                    setActivities(actividades);
+                    setError(false);
+                }).catch(() => {
+                    setError(true);
+                });
                 break;
             }
         }
@@ -114,8 +157,31 @@ export default function App(): JSX.Element {
         });
     }
 
+    function onClickVote(vote: any) {
+        voteActivity(vote).then(({ description }: any) => {
+            console.log(`Descripción tras votar en el servidor: ${description}`);
+
+            onPageBack();
+            onPageBack();
+            setError(false);
+        }).catch(() => {
+            setError(true);
+        });
+    }
+
+    function onCloseActivity(actividad: any) {
+        closeActivity(actividad).then(({ description }: any) => {
+            console.log(`Descripción al terminal la actividad: ${description}`)
+
+            onPageBack();
+            setError(false);
+        }).catch(() => {
+            setError(true);
+        });
+    }
+
     function onModifyUser(user: any) {
-        const currentPage = navigation[navigation.length];
+        const currentPage = navigation[navigation.length - 1];
 
         if (currentPage === Pages.addUser) {
             newUser(user).then((jsonResponse: any) => {
@@ -193,7 +259,7 @@ export default function App(): JSX.Element {
                     onClickBack={onPageBack}
                     onModifyUser={onGoingToModifyUser}
                     onRemoveUser={onRemoveUser}
-                    onSeeActivities={(user: any) => console.log(`Se ha clickado para ver las actividades de ${user}`)}
+                    onSeeActivities={onSeeActivitiesFromUser}
                     users={allUsers}
                 />
             );
@@ -202,26 +268,9 @@ export default function App(): JSX.Element {
         case Pages.myActivities: {
             currentPage = (
                 <ActivityList
-                    activities={
-                        [
-                            {
-                                titulo: 'Titulo de la actividad',
-                                localizacion: 'Calle Elvira junto Hipercor',
-                                nombre: 'Juan Fernández Del Amo',
-                                categoria: 'Deporte',
-                                fecha: new Date()
-                            },
-                            {
-                                titulo: 'Titulo de la actividad',
-                                localizacion: 'Calle Elvira junto Hipercor',
-                                nombre: 'Juan Fernández Del Amo',
-                                categoria: 'Deporte',
-                                fecha: new Date()
-                            }
-                        ]
-                    }
+                    activities={activities}
                     onClickBack={onPageBack}
-                    onClickActivity={onSeeActivity}
+                    onClickActivity={({ ...args }: any) => onGetSpecificActivity({ ...args, nextPage: Pages.seeActivity})}
                     page='proposeByUser'
                 />
             );
@@ -230,26 +279,9 @@ export default function App(): JSX.Element {
         case Pages.realizedActivities: {
             currentPage = (
                 <ActivityList
-                    activities={
-                        [
-                            {
-                                titulo: 'Titulo de la actividad',
-                                localizacion: 'Calle Elvira junto Hipercor',
-                                nombre: 'Juan Fernández Del Amo',
-                                categoria: 'Deporte',
-                                fecha: new Date()
-                            },
-                            {
-                                titulo: 'Titulo de la actividad',
-                                localizacion: 'Calle Elvira junto Hipercor',
-                                nombre: 'Juan Fernández Del Amo',
-                                categoria: 'Deporte',
-                                fecha: new Date()
-                            }
-                        ]
-                    }
+                    activities={activities}
                     onClickBack={onPageBack}
-                    onClickActivity={onAssessmentActivity}
+                    onClickActivity={({ ...args }: any) => onGetSpecificActivity({ ...args, nextPage: Pages.assessmentActivity })}
                     page='madeByPartner'
                 />
             );
@@ -258,26 +290,9 @@ export default function App(): JSX.Element {
         case Pages.currentActivities: {
             currentPage = (
                 <ActivityList
-                    activities={
-                        [
-                            {
-                                titulo: 'Titulo de la actividad',
-                                localizacion: 'Calle Elvira junto Hipercor',
-                                nombre: 'Juan Fernández Del Amo',
-                                categoria: 'Deporte',
-                                fecha: new Date()
-                            },
-                            {
-                                titulo: 'Titulo de la actividad',
-                                localizacion: 'Calle Elvira junto Hipercor',
-                                nombre: 'Juan Fernández Del Amo',
-                                categoria: 'Deporte',
-                                fecha: new Date()
-                            }
-                        ]
-                    }
+                    activities={activities}
                     onClickBack={onPageBack}
-                    onClickActivity={() => setNavigation(navigation.concat([Pages.adminSeeActivity]))}
+                    onClickActivity={({ ...args }: any) => onGetSpecificActivity({ ...args, nextPage: Pages.adminSeeActivity })}
                     page='madeByVolunteer'
                 />
             );
@@ -287,10 +302,8 @@ export default function App(): JSX.Element {
             currentPage = (
                 <AssessmentActivity
                     onClickBack={onPageBack}
-                    title="Título de la actividad"
-                    description="Dummy description"
-                    volunteerName="Dummy volunteer name"
-                    onClickVote={() => console.log("It wanted to vote an activity")}
+                    onClickVote={onClickVote}
+                    activity={specificActivity}
                 />
             );
             break;
@@ -299,10 +312,8 @@ export default function App(): JSX.Element {
             currentPage = (
                 <SeeActivity
                     onClickBack={onPageBack}
-                    localization="Calle Madrid, Granada"
-                    date={new Date()}
-                    participants={["Juan Fernández Ortiz"]}
-                    onClick={() => console.log("On see activity click")}
+                    onClick={onCloseActivity}
+                    activity={specificActivity}
                 />
             );
 
@@ -312,10 +323,8 @@ export default function App(): JSX.Element {
             currentPage = (
                 <SeeActivity
                     onClickBack={onPageBack}
-                    localization="Calle Elvira Junto Hipercor"
-                    date={new Date()}
-                    participants={["Juan Fernández Ortiz"]}
-                    onClick={() => console.log("On sign up activity")}
+                    onClick={onSignUpIntoActivity}
+                    activity={specificActivity}
                     page='signUp'
                 />
             );
@@ -326,26 +335,9 @@ export default function App(): JSX.Element {
             currentPage = (
                 <SeeActivity
                     onClickBack={onPageBack}
-                    localization="Calle Elvira Junto Hipercor"
-                    date={new Date()}
-                    participants={["Juan Fernández Ortiz"]}
+                    onClick={() => console.log("Se ha cliqueado")}
+                    activity={specificActivity}
                     page="adminSee"
-                    assessments={
-                        [
-                            {
-                                userName: "Juan Fernández López",
-                                rate: 4,
-                                rol: "Socio",
-                                description: "Me ha gustado la actividad, el voluntario era incluso demasiado simpático jeje, repetiré"
-                            },
-                            {
-                                userName: "Juan Fernández López",
-                                rate: 4,
-                                rol: "Socio",
-                                description: "Me ha gustado la actividad, el voluntario era incluso demasiado simpático jeje, repetiré"
-                            }
-                        ]
-                    }
                 />
             );
             break;
@@ -353,26 +345,9 @@ export default function App(): JSX.Element {
         case Pages.freeActivities: {
             currentPage = (
                 <ActivityList
-                    activities={
-                        [
-                            {
-                                titulo: 'Titulo de la actividad',
-                                localizacion: 'Calle Elvira junto Hipercor',
-                                nombre: 'Juan Fernández Del Amo',
-                                categoria: 'Deporte',
-                                fecha: new Date()
-                            },
-                            {
-                                titulo: 'Titulo de la actividad',
-                                localizacion: 'Calle Elvira junto Hipercor',
-                                nombre: 'Juan Fernández Del Amo',
-                                categoria: 'Deporte',
-                                fecha: new Date()
-                            }
-                        ]
-                    }
+                    activities={activities}
                     onClickBack={onPageBack}
-                    onClickActivity={() => setNavigation(navigation.concat([Pages.signUpIntoActivity]))}
+                    onClickActivity={({ ...args }: any) => onGetSpecificActivity({ ...args, nextPage: Pages.signUpIntoActivity})}
                     page='free'
                 />
             );
@@ -382,26 +357,9 @@ export default function App(): JSX.Element {
         case Pages.activityListSignedUp: {
             currentPage = (
                 <ActivityList
-                    activities={
-                        [
-                            {
-                                titulo: 'Titulo de la actividad',
-                                localizacion: 'Calle Elvira junto Hipercor',
-                                nombre: 'Juan Fernández Del Amo',
-                                categoria: 'Deporte',
-                                fecha: new Date()
-                            },
-                            {
-                                titulo: 'Titulo de la actividad',
-                                localizacion: 'Calle Elvira junto Hipercor',
-                                nombre: 'Juan Fernández Del Amo',
-                                categoria: 'Deporte',
-                                fecha: new Date()
-                            }
-                        ]
-                    }
+                    activities={activities}
                     onClickBack={onPageBack}
-                    onClickActivity={onClickSignedUpActivity}
+                    onClickActivity={({ ...args }: any) => onGetSpecificActivity({ ...args, nextPage: Pages.chat })}
                     page='signUp'
                 />
             );
@@ -412,24 +370,8 @@ export default function App(): JSX.Element {
             currentPage = (
                 <Chat
                     onClickBack={onPageBack}
-                    title='Título de la actividad'
-                    otherUserName='Juan Fernández Ortiz'
-                    messages={
-                        [
-                            {
-                                text: "My own message",
-                                owner: "Mine"
-                            },
-                            {
-                                text: "His message",
-                                owner: "Yours"
-                            },
-                            {
-                                text: "My own message",
-                                owner: "Mine"
-                            }
-                        ]
-                    }
+                    ownUser={ownUser}
+                    activity={specificActivity}
                 />
             );
 

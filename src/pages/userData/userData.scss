@@ -22,7 +22,7 @@
     font-size: 2rem;
 }
 
-label.MuiFormLabel-root.MuiInputLabel-root.MuiInputLabel-formControl.MuiInputLabel-animated.MuiInputLabel-shrink.MuiInputLabel-outlined.MuiFormLabel-filled {
+label.MuiFormLabel-root.MuiInputLabel-root.MuiInputLabel-formControl.MuiInputLabel-animated.MuiInputLabel-shrink.MuiInputLabel-outlined.MuiFormLabel-filled.select--label {
     display: none;
 }
 
@@ -89,6 +89,13 @@ label.MuiFormLabel-root.MuiInputLabel-root.MuiInputLabel-formControl.MuiInputLab
     margin-bottom: 1rem;
 }
 
-.MuiGrid-root.button-user-data--section {
-    margin-bottom: 2rem;
+.MuiGrid-root.likes-images--container {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+
+    & > .likes--images {
+        width: 15rem;
+        height: 15rem;
+        cursor: pointer;
+    }
 }

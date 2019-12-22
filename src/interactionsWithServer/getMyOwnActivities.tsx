@@ -1,5 +1,5 @@
 export default function getMyOwnActivities() {
-    const url = `${process.env.SERVER_URL}api/actividades`;
+    const url = `${process.env.SERVER_URL}api/actividades/propias`;
 
     return fetch(url, {
         method: 'GET',

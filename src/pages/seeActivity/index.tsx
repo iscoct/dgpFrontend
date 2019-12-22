@@ -6,13 +6,19 @@ import { Rating } from '@material-ui/lab';
 import './seeActivity.scss';
 
 function Participants({ participants }: any): JSX.Element {
-    return participants ? (
+    let participantNames = '';
+
+    participants ? participants.forEach(({ nombre }: any) => {
+        participantNames += ` ${nombre} `;
+    }) : <></>;
+
+    return (
         <React.Fragment>
             <Typography className="activity--typography" variant="body1">
-                Participantes: {participants.join(", ")}
+                Participantes: {participantNames}
             </Typography>
         </React.Fragment>
-    ) : <></>;
+    );
 }
 
 function ButtonSection(props: any): JSX.Element {
@@ -67,7 +73,7 @@ function AdminSection({ assessments }: any): JSX.Element {
     return (
         <Grid className="admin--section" xs={12} container item justify="center">
             {
-                assessments.map((assessment: any, index: number) => (
+                Array.isArray(assessments) && assessments.map((assessment: any, index: number) => (
                     <Assessment key={index} data={assessment} />
                 ))
             }
@@ -76,8 +82,9 @@ function AdminSection({ assessments }: any): JSX.Element {
 }
 
 export default function SeeActivity(props: any): JSX.Element {
-    const { onClickBack, onClick, participants, date, assessments,
-        localization, mustShowButton = true } = props;
+    const { onClickBack, onClick, activity, mustShowButton = true } = props;
+    const { nombre, descripcion, imagen, id_actividad,
+        participantes, fecha, localizacion, valoraciones } = activity || {};
     const page: 'see' | 'signUp' | 'adminSee' = props.page || 'see';
     const possiblyTitle = {
         see: 'Ver',
@@ -93,23 +100,27 @@ export default function SeeActivity(props: any): JSX.Element {
                 onIconClick={onClickBack}
             />
             <ActivityHeader
-                title="Título de la actividad"
-                description="Dummy Description"
-                image="dummyImage"
+                title={nombre}
+                description={descripcion}
+                image={imagen}
                 alt="La actividad no tiene foto asociada"
             />
             <Participants
-                participants={participants}
+                participants={participantes}
             />
-            <Typography className="activity--typography" variant="body1">
-                Fecha y hora: {date.toLocaleString()}
-            </Typography>
-            <Typography className="activity--typography" variant="body1">
-                Lugar de realización: {localization}
-            </Typography>
+            { fecha ?
+                <Typography className="activity--typography" variant="body1">
+                    Fecha y hora: {fecha instanceof Date ? fecha.toLocaleString() : fecha}
+                </Typography> : <></>
+            }
+            { localizacion ?
+                <Typography className="activity--typography" variant="body1">
+                    Lugar de realización: {localizacion}
+                </Typography> : <></>
+            }
             {mustShowButton && page !== "adminSee" ?
-                <ButtonSection onClick={onClick} page={page} /> : ''}
-            {page === 'adminSee' ? <AdminSection assessments={assessments} /> : ''}
+                <ButtonSection onClick={() => onClick({ id_actividad, localizacion, fecha })} page={page} /> : ''}
+            {page === 'adminSee' ? <AdminSection assessments={valoraciones} /> : ''}
         </React.Fragment>
     );
 }

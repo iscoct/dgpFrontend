@@ -8,7 +8,7 @@
 		justify-content: center;
 		color: white;
 		padding-top: 1rem;
-		font-size: 1.2rem;
+		font-size: 1.4rem;
 
 		&.activity-title {
 			font-size: 1.75rem;
@@ -28,6 +28,10 @@
 			margin-left: 2rem;
 		}
 	}
+
+	&.container {
+		min-width: 75%;
+	}
 }
 
 .row > .activity--button {
@@ -36,6 +40,7 @@
 
 .activity-button--section.row {
 	justify-content: center;
+	margin-bottom: 2rem;
 }
 
 .activity-image--section {
