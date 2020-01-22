@@ -22,7 +22,7 @@ function ActivityButton({ onClick, icon, children }: any): JSX.Element {
 
 function ActivityActions(props: any): JSX.Element {
 	const { onClick } = props;
-	const page: 'free' | 'madeByPartner' | 'madeByVolunteer' | 'signUp' | 'proposeByUser'= props.page;
+	const page: 'free' | 'madeByPartner' | 'madeByVolunteer' | 'signUp' | 'proposeByUser' = props.page;
 	const subpage = Subpages[page];
 	let result: JSX.Element = <></>;
 

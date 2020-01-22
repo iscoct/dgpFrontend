@@ -186,6 +186,7 @@ export default function App(): JSX.Element {
         if (currentPage === Pages.addUser) {
             newUser(user).then((jsonResponse: any) => {
                 console.log(`Json response: ${jsonResponse}`);
+                onPageBack();
                 setError(false);
             }).catch(() => {
                 setError(true);
@@ -265,7 +266,8 @@ export default function App(): JSX.Element {
             );
             break;
         }
-        case Pages.myActivities: {
+        case Pages.myActivities:
+        case Pages.activityListSignedUp: {
             currentPage = (
                 <ActivityList
                     activities={activities}

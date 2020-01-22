@@ -50,10 +50,6 @@ const VolunteerNavigation = ({ onClick }: any) => {
                     text="Realizadas"
                     icon={<PlaylistAddCheck />}
                 />
-                <NavigationElement
-                    onClick={() => onClick(Pages.activityListSignedUp)}
-                    text="Apuntadas"
-                />
             </Row>
         </Container>
     );
@@ -95,7 +91,6 @@ export default function Profile({ image, name, onClick, location, age, isAdmin =
                 <Container className="profile__personal__data__section">
                     <PersonalDataElement section="h4" text={name} />
                     <PersonalDataElement section="h5" text={location} />
-                    <PersonalDataElement section="h5" text={`${age} años`} />
                 </Container>
                 {isAdmin ? <AdministratorNavigation onClick={onClick} />
                     : <VolunteerNavigation onClick={onClick} />}
